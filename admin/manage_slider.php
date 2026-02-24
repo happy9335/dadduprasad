@@ -27,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $title_en = $_POST['title_en'];
     $subtitle_hi = $_POST['subtitle_hi'];
     $subtitle_en = $_POST['subtitle_en'];
+    $button_link = ltrim($_POST['button_link'] ?? '', '/');
     $order = (int)$_POST['display_order'];
     $url = '';
 
@@ -49,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!empty($url)) {
         if (!isset($_SESSION['error'])) {
-            $stmt = $pdo->prepare("INSERT INTO home_slider (image_url, title_hi, title_en, subtitle_hi, subtitle_en, display_order) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$url, $title_hi, $title_en, $subtitle_hi, $subtitle_en, $order]);
+            $stmt = $pdo->prepare("INSERT INTO home_slider (image_url, title_hi, title_en, subtitle_hi, subtitle_en, button_link, display_order) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$url, $title_hi, $title_en, $subtitle_hi, $subtitle_en, $button_link, $order]);
             $_SESSION['success'] = "Slide added.";
         }
     } else {
@@ -102,6 +103,15 @@ $items = $pdo->query("SELECT * FROM home_slider ORDER BY display_order ASC")->fe
                                 <div class="mb-3"><label>Title</label><input type="text" class="form-control" name="title_en"></div>
                                 <div class="mb-3"><label>Subtitle (Optional)</label><input type="text" class="form-control" name="subtitle_en"></div>
                             </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Button Link (Optional)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">/</span>
+                                <input type="text" class="form-control" name="button_link" placeholder="about.php">
+                            </div>
+                            <small class="text-muted">Will show "Learn More" / "और जानें" button on slide.</small>
                         </div>
 
                         <div class="mb-3">

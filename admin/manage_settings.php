@@ -8,7 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         $settings = [
             'hero_tagline', 'hero_intro', 'about_lead', 'about_desc', 
-            'contact_address', 'contact_phone', 'contact_email', 'contact_hours'
+            'contact_address', 'contact_phone', 'contact_email', 'contact_hours',
+            'fb_link', 'twitter_link', 'yt_link', 'ig_link'
         ];
 
         $stmt = $pdo->prepare("INSERT INTO settings (setting_key, value_hi, value_en) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE value_hi = VALUES(value_hi), value_en = VALUES(value_en)");
@@ -133,6 +134,39 @@ function getVal($array, $key, $lang) {
                         <div class="mb-3"><label class="form-label">Phone</label><input type="text" class="form-control" name="contact_phone_en" value="<?= getVal($currentSettings, 'contact_phone', 'en') ?>"></div>
                         <div class="mb-3"><label class="form-label">Email</label><input type="text" class="form-control" name="contact_email_en" value="<?= getVal($currentSettings, 'contact_email', 'en') ?>"></div>
                         <div class="mb-3"><label class="form-label">Working Hours</label><input type="text" class="form-control" name="contact_hours_en" value="<?= getVal($currentSettings, 'contact_hours', 'en') ?>"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Media Settings -->
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 text-orange"><i class="fas fa-share-alt me-2"></i> Social Media Links</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted small mb-3">These links are the same for both languages.</p>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fab fa-facebook text-primary me-1"></i> Facebook</label>
+                        <input type="url" class="form-control" name="fb_link_en" value="<?= getVal($currentSettings, 'fb_link', 'en') ?>" placeholder="https://facebook.com/...">
+                        <!-- Also fill Hindi field silently to match DB logic -->
+                        <input type="hidden" name="fb_link_hi" value="<?= getVal($currentSettings, 'fb_link', 'en') ?>">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fab fa-twitter text-info me-1"></i> Twitter / X</label>
+                        <input type="url" class="form-control" name="twitter_link_en" value="<?= getVal($currentSettings, 'twitter_link', 'en') ?>" placeholder="https://twitter.com/...">
+                        <input type="hidden" name="twitter_link_hi" value="<?= getVal($currentSettings, 'twitter_link', 'en') ?>">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fab fa-instagram text-danger me-1"></i> Instagram</label>
+                        <input type="url" class="form-control" name="ig_link_en" value="<?= getVal($currentSettings, 'ig_link', 'en') ?>" placeholder="https://instagram.com/...">
+                        <input type="hidden" name="ig_link_hi" value="<?= getVal($currentSettings, 'ig_link', 'en') ?>">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label"><i class="fab fa-youtube text-danger me-1"></i> YouTube</label>
+                        <input type="url" class="form-control" name="yt_link_en" value="<?= getVal($currentSettings, 'yt_link', 'en') ?>" placeholder="https://youtube.com/...">
+                        <input type="hidden" name="yt_link_hi" value="<?= getVal($currentSettings, 'yt_link', 'en') ?>">
                     </div>
                 </div>
             </div>

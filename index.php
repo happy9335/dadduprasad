@@ -17,7 +17,7 @@
     $pressReleases= $pdo->query("SELECT * FROM press_releases    ORDER BY release_date  DESC LIMIT 5")->fetchAll();
     $achievements = $pdo->query("SELECT * FROM achievements      ORDER BY display_order  ASC  LIMIT 6")->fetchAll();
     $journey      = $pdo->query("SELECT * FROM biography         ORDER BY display_order  ASC")->fetchAll();
-    $media        = $pdo->query("SELECT * FROM media_gallery WHERE media_type='video' ORDER BY display_order ASC LIMIT 3")->fetchAll();
+    $media        = $pdo->query("SELECT * FROM media_gallery ORDER BY display_order ASC")->fetchAll();
 
     /* Fallback demo — DB rows from your SQL */
     if (empty($sliders)) {
@@ -250,8 +250,12 @@
                                 <?= htmlspecialchars($sl['title_hi'] ?? $tagline_hi) ?>
                             </h1>
                             <div class="hero-actions">
-                                <a href="about.php" class="hero-btn-primary" data-hi="परिचय पढ़ें" data-en="Know More">परिचय पढ़ें</a>
-                                <a href="contact.php" class="hero-btn-ghost" data-hi="संपर्क करें" data-en="Contact Us">संपर्क करें</a>
+                                <?php if (!empty($sl['button_link'])): ?>
+                                    <a href="<?= htmlspecialchars($sl['button_link']) ?>" class="hero-btn-primary" data-hi="और जानें" data-en="Learn More">और जानें</a>
+                                <?php else: ?>
+                                    <a href="about.php" class="hero-btn-primary" data-hi="परिचय पढ़ें" data-en="Know More">परिचय पढ़ें</a>
+                                    <a href="contact.php" class="hero-btn-ghost" data-hi="संपर्क करें" data-en="Contact Us">संपर्क करें</a>
+                                <?php endif; ?>
                             </div>
                             <div class="hero-links">
                                 <a href="press.php"><i class="fas fa-newspaper"></i><span data-hi="प्रेस विज्ञप्ति" data-en="Press Notes">प्रेस विज्ञप्ति</span></a>
@@ -1001,29 +1005,136 @@
 
 
 
+   
+
     <!-- ═══════════════════════════════════
-        CONTACT STRIP
+        STAY CONNECTED SECTION
         ═══════════════════════════════════ -->
-    <section class="ss-contact-strip">
+    <style>
+    .sc-section {
+        padding: 60px 0;
+        background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+        border-top: 1px solid #e2e8f0;
+    }
+    .sc-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .sc-title {
+        font-family: 'Mukta', sans-serif;
+        font-size: clamp(1.8rem, 3vw, 2.4rem);
+        font-weight: 800;
+        color: #003893;
+        margin-bottom: 8px;
+    }
+    .sc-title-underline {
+        height: 3px;
+        width: 80px;
+        background: #D21034;
+        margin: 0 auto;
+    }
+    .sc-col-header {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+    .sc-col-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 30px;
+        border: 2px solid #003893;
+        color: #003893;
+        font-weight: 700;
+        background: #fff;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: all 0.25s;
+    }
+    .sc-col-btn.fb { border-color: #003893; color: #003893; }
+    .sc-col-btn.tw { border-color: #003893; color: #003893; }
+    .sc-col-btn.yt { border-color: #D21034; color: #D21034; }
+    .sc-col-btn:hover { background: #f8f9fa; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+    .sc-box {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0;
+        height: 500px;
+        overflow-y: auto;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+    }
+    .sc-yt-vid {
+        margin: 15px;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #eaeaea;
+        background: #000;
+    }
+    </style>
+
+    <section class="sc-section">
         <div class="container">
-            <div class="row g-4 align-items-center">
-                <div class="col-md-8">
-                    <h3 class="ss-contact-title" data-hi="हमसे संपर्क करें" data-en="Get in Touch">हमसे संपर्क करें</h3>
-                    <?php
-                    $addr  = getSettingVal($pdo, 'contact_address');
-                    $phone = getSettingVal($pdo, 'contact_phone');
-                    $email = getSettingVal($pdo, 'contact_email');
-                    $hours = getSettingVal($pdo, 'contact_hours');
-                    ?>
-                    <div class="ss-contact-details">
-                        <span><i class="fas fa-map-marker-alt me-2"></i><?= htmlspecialchars($addr['value_hi'] ?: 'लखनऊ, उत्तर प्रदेश') ?></span>
-                        <span><i class="fas fa-phone me-2"></i><a href="tel:<?= htmlspecialchars($phone['value_en']) ?>"><?= htmlspecialchars($phone['value_hi'] ?: '+91 XXXXXXXXXX') ?></a></span>
-                        <span><i class="fas fa-envelope me-2"></i><a href="mailto:<?= htmlspecialchars($email['value_en']) ?>"><?= htmlspecialchars($email['value_hi'] ?: 'info@dadduprasad.in') ?></a></span>
-                        <span><i class="fas fa-clock me-2"></i><?= htmlspecialchars($hours['value_hi'] ?: 'सुबह 10:00 - दोपहर 2:00') ?></span>
+            <div class="sc-header">
+                <h2 class="sc-title" data-hi="दद्दू प्रसाद जी से जुड़े रहें" data-en="Stay connected with Daddoo Prasad">दद्दू प्रसाद जी से जुड़े रहें</h2>
+                <div class="sc-title-underline"></div>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Facebook Column -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="sc-col-header">
+                        <a href="https://www.facebook.com/dadduprasadoffice/" target="_blank" class="sc-col-btn fb">
+                            <i class="fab fa-facebook" style="color:#1877F2; font-size:1.1rem;"></i> Follow
+                        </a>
+                    </div>
+                    <div class="sc-box text-center" style="display:flex; justify-content:center; align-items:flex-start; padding-top:15px;">
+                        <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fdadduprasadoffice%2F&tabs=timeline&width=340&height=470&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true" width="340" height="470" style="border:none;overflow:hidden;max-width:100%;" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
                     </div>
                 </div>
-                <div class="col-md-4 text-md-end">
-                    <a href="contact.php" class="ss-btn-primary" data-hi="संदेश भेजें" data-en="Send Message">संदेश भेजें <i class="fas fa-arrow-right ms-2"></i></a>
+                
+                <!-- Twitter Column -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="sc-col-header">
+                        <a href="https://twitter.com/dadduprasad" target="_blank" class="sc-col-btn tw">
+                            <i class="fab fa-x-twitter" style="font-size:1.1rem;"></i> Follow
+                        </a>
+                    </div>
+                    <div class="sc-box" style="padding:15px;">
+                        <a class="twitter-timeline" data-height="470" href="https://twitter.com/dadduprasad?ref_src=twsrc%5Etfw">Tweets by dadduprasad</a> 
+                        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    </div>
+                </div>
+                
+                <!-- YouTube Column -->
+                <div class="col-lg-4 col-md-12">
+                    <div class="sc-col-header">
+                        <a href="https://www.youtube.com/@DadduPrasad" target="_blank" class="sc-col-btn yt">
+                            <i class="fab fa-youtube text-danger" style="font-size:1.1rem;"></i> Subscribe
+                        </a>
+                    </div>
+                    <div class="sc-box" style="background:#fcfcfc;">
+                        <?php 
+                        $ytVids = array_filter($media, function($m) { return $m['media_type'] === 'video'; });
+                        $ytVids = array_slice(array_values($ytVids), 0, 3);
+                        foreach($ytVids as $vid): 
+                            preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i', $vid['media_url'], $matches);
+                            $yt_id = $matches[1] ?? '';
+                            if($yt_id):
+                        ?>
+                        <div class="sc-yt-vid">
+                            <iframe src="https://www.youtube.com/embed/<?= $yt_id ?>?rel=0" frameborder="0" allowfullscreen style="width:100%; height:200px; display:block;"></iframe>
+                        </div>
+                        <?php endif; endforeach; ?>
+                        
+                        <?php if(empty($ytVids)): ?>
+                            <div class="text-center text-muted mt-5 pt-5">
+                                <i class="fab fa-youtube fa-3x mb-3 text-secondary" style="opacity:0.3"></i>
+                                <p data-hi="कोई वीडियो उपलब्ध नहीं" data-en="No videos available">कोई वीडियो उपलब्ध नहीं</p>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
