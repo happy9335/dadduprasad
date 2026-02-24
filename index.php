@@ -280,23 +280,8 @@
         </div>
     </div>
 
-    <!-- Swiper init (inline, before other JS) -->
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        if (typeof Swiper !== 'undefined') {
-            new Swiper('.heroSwiper', {
-                loop: true,
-                speed: 900,
-                autoplay: { delay: 5500, disableOnInteraction: false },
-                pagination: { el: '.heroSwiper .swiper-pagination', clickable: true },
-                navigation: {
-                    nextEl: '.heroSwiper .swiper-button-next',
-                    prevEl: '.heroSwiper .swiper-button-prev',
-                },
-            });
-        }
-    });
-    </script>
+
+
 
     <!-- ═══════════════════════════════════
         ABOUT SECTION

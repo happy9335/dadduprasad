@@ -1,152 +1,190 @@
-document.addEventListener('DOMContentLoaded', () => {
+// ─────────────────────────────────────────────────────────────────
+//  DADDOO PRASAD — main.js  (clean rewrite, no conflicts)
+// ─────────────────────────────────────────────────────────────────
 
-    // ── 1. Language Toggle ──
-    const langToggleBtn = document.getElementById('langToggle');
-    let currentLang = 'hi';
+(function () {
+    'use strict';
 
-    if (langToggleBtn) {
-        langToggleBtn.addEventListener('click', () => {
-            currentLang = currentLang === 'hi' ? 'en' : 'hi';
-            langToggleBtn.innerHTML = currentLang === 'hi'
-                ? '<span class="lang-text">A/अ</span> English'
-                : '<span class="lang-text">A/अ</span> हिंदी';
+    // Wait until everything is loaded (including CDN scripts in footer)
+    window.addEventListener('load', function () {
 
-            document.querySelectorAll('[data-hi][data-en]').forEach(el => {
-                const val = el.getAttribute('data-' + currentLang);
-                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                    if (el.hasAttribute('placeholder')) el.setAttribute('placeholder', val);
-                } else {
-                    el.textContent = val;
-                }
+        /* ══════════════════════════════════════
+           1.  HERO SWIPER
+           Uses class .heroSwiper set in index.php
+           ══════════════════════════════════════ */
+        var heroEl = document.querySelector('.heroSwiper');
+        if (heroEl && typeof Swiper !== 'undefined') {
+            // Force height via JS before init — bulletproof against CSS conflicts
+            var h = Math.max(Math.round(window.innerHeight * 0.88), 540);
+            heroEl.style.height = h + 'px';
+            heroEl.style.minHeight = '540px';
+            heroEl.style.display = 'block';
+            heroEl.style.overflow = 'hidden';
+
+            // Force all swiper-slides to same height
+            heroEl.querySelectorAll('.swiper-slide').forEach(function (sl) {
+                sl.style.height = h + 'px';
             });
 
-            const titleEl = document.querySelector('title');
-            if (titleEl && titleEl.hasAttribute('data-' + currentLang)) {
-                document.title = titleEl.getAttribute('data-' + currentLang);
-            }
-        });
-    }
-
-    // ── 2. Hero Swiper ──
-    if (typeof Swiper !== 'undefined') {
-        const heroEl = document.querySelector('.ss-swiper');
-        if (heroEl) {
-            new Swiper('.ss-swiper', {
-                loop: true,
-                speed: 800,
-                autoplay: {
-                    delay: 5500,
-                    disableOnInteraction: false,
-                },
-                effect: 'fade',
-                fadeEffect: { crossFade: true },
-                pagination: {
-                    el: '.ss-dots',
-                    clickable: true,
-                },
-                navigation: {
-                    nextEl: '.ss-next',
-                    prevEl: '.ss-prev',
-                },
-            });
-        }
-
-        // Legacy / fallback for old heroSwiper class
-        if (document.querySelector('.heroSwiper')) {
             new Swiper('.heroSwiper', {
                 loop: true,
-                autoplay: { delay: 5000, disableOnInteraction: false },
-                pagination: { el: '.swiper-pagination', clickable: true },
-                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                speed: 900,
+                autoHeight: false,
+                autoplay: {
+                    delay: 5500,
+                    disableOnInteraction: false
+                },
+                pagination: {
+                    el: '.heroSwiper .swiper-pagination',
+                    clickable: true
+                },
+                navigation: {
+                    nextEl: '.heroSwiper .swiper-button-next',
+                    prevEl: '.heroSwiper .swiper-button-prev'
+                },
+                on: {
+                    init: function () {
+                        // Re-apply height after init (Swiper sometimes resets)
+                        this.el.style.height = h + 'px';
+                        this.wrapperEl.style.height = h + 'px';
+                    }
+                }
             });
         }
 
-        // Generic dpswiper
-        if (document.querySelector('.dpswiper')) {
-            new Swiper('.dpswiper', {
-                loop: true,
-                autoplay: { delay: 5000, disableOnInteraction: false },
-                pagination: { el: '.dp-pagination', clickable: true },
-                navigation: { nextEl: '.dp-arrow-next', prevEl: '.dp-arrow-prev' },
+        /* ══════════════════════════════════════
+           2.  MOBILE HAMBURGER MENU
+           ══════════════════════════════════════ */
+        var navBtn = document.getElementById('navToggle');
+        var navList = document.getElementById('mainNavList');
+        if (navBtn && navList) {
+            navBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                navList.classList.toggle('open');
+                var icon = navBtn.querySelector('i');
+                if (icon) icon.className = navList.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+            });
+            document.addEventListener('click', function (e) {
+                if (!navBtn.contains(e.target) && !navList.contains(e.target)) {
+                    navList.classList.remove('open');
+                    var icon = navBtn.querySelector('i');
+                    if (icon) icon.className = 'fas fa-bars';
+                }
             });
         }
-    }
 
-    // ── 3. Gallery Filter ──
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const val = btn.getAttribute('data-filter');
-            galleryItems.forEach(item => {
-                item.classList.toggle('hidden', !(val === 'all' || item.classList.contains('filter-' + val)));
-            });
-        });
-    });
+        /* ══════════════════════════════════════
+           3.  LANGUAGE TOGGLE (Hi / En)
+           ══════════════════════════════════════ */
+        var langBtn = document.getElementById('langToggle');
+        var lang = 'hi';
+        if (langBtn) {
+            langBtn.addEventListener('click', function () {
+                lang = lang === 'hi' ? 'en' : 'hi';
+                langBtn.innerHTML = lang === 'hi'
+                    ? '<i class="fas fa-language me-1"></i>EN'
+                    : '<i class="fas fa-language me-1"></i>हि';
 
-    // ── 4. Contact Form AJAX ──
-    const contactForm = document.getElementById('contactForm');
-    const formResponse = document.getElementById('formResponse');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const btn = contactForm.querySelector('button[type="submit"]');
-            const orig = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ...';
-            btn.disabled = true;
-            fetch(this.getAttribute('action'), { method: 'POST', body: new FormData(this) })
-                .then(r => r.json())
-                .then(data => {
-                    formResponse.textContent = data.message;
-                    formResponse.className = 'form-response mt-2 ' + (data.status === 'success' ? 'success' : 'error');
-                    if (data.status === 'success') contactForm.reset();
-                })
-                .catch(() => {
-                    formResponse.textContent = 'त्रुटि हुई। कृपया पुनः प्रयास करें।';
-                    formResponse.className = 'form-response mt-2 error';
-                })
-                .finally(() => {
-                    btn.innerHTML = orig; btn.disabled = false;
-                    setTimeout(() => { formResponse.className = 'form-response mt-2'; formResponse.textContent = ''; }, 5000);
+                document.querySelectorAll('[data-hi][data-en]').forEach(function (el) {
+                    var val = el.getAttribute('data-' + lang);
+                    if (!val) return;
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.setAttribute('placeholder', val);
+                    } else {
+                        el.textContent = val;
+                    }
                 });
-        });
-    }
+            });
+        }
 
-    // ── 5. Scroll-based nav shadow ──
-    const siteNav = document.querySelector('.site-nav');
-    if (siteNav) {
-        window.addEventListener('scroll', () => {
-            siteNav.style.boxShadow = window.scrollY > 50
-                ? '0 4px 20px rgba(0,56,147,0.15)'
-                : '0 2px 10px rgba(0,0,0,0.08)';
-        }, { passive: true });
-    }
+        /* ══════════════════════════════════════
+           4.  SCROLL FADE-IN ANIMATIONS
+           ══════════════════════════════════════ */
+        if ('IntersectionObserver' in window) {
+            var targets = document.querySelectorAll(
+                '.ss-ach-card, .ss-tl-card, .ss-press-item, .ss-news-item'
+            );
+            targets.forEach(function (el) {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(24px)';
+                el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            });
+            var obs = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12 });
+            targets.forEach(function (el) { obs.observe(el); });
+        }
 
-    // ── 6. Smooth scroll for anchor links ──
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-        a.addEventListener('click', e => {
-            const target = document.querySelector(a.getAttribute('href'));
-            if (target) {
+        /* ══════════════════════════════════════
+           5.  STICKY HEADER SHADOW
+           ══════════════════════════════════════ */
+        var header = document.querySelector('.ss-header');
+        if (header) {
+            window.addEventListener('scroll', function () {
+                header.style.boxShadow = window.scrollY > 10
+                    ? '0 4px 16px rgba(0,0,0,0.12)'
+                    : '0 2px 8px rgba(0,0,0,0.07)';
+            }, { passive: true });
+        }
+
+        /* ══════════════════════════════════════
+           6.  CONTACT FORM AJAX
+           ══════════════════════════════════════ */
+        var form = document.getElementById('contactForm');
+        var response = document.getElementById('formResponse');
+        if (form && response) {
+            form.addEventListener('submit', function (e) {
                 e.preventDefault();
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
-    });
+                var btn = form.querySelector('button[type=submit]');
+                var orig = btn ? btn.textContent : '';
+                if (btn) { btn.disabled = true; btn.textContent = 'भेज रहे हैं...'; }
 
-    // ── 7. Animation on scroll (fade-in) ──
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('anim-visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
+                fetch('process_contact.php', {
+                    method: 'POST',
+                    body: new FormData(form)
+                })
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        response.className = 'form-response ' + (data.success ? 'success' : 'error');
+                        response.textContent = data.message || (data.success ? 'संदेश भेजा गया!' : 'कुछ गलत हुआ।');
+                        if (data.success) form.reset();
+                    })
+                    .catch(function () {
+                        response.className = 'form-response error';
+                        response.textContent = 'नेटवर्क त्रुटि। कृपया पुनः प्रयास करें।';
+                    })
+                    .finally(function () {
+                        if (btn) { btn.disabled = false; btn.textContent = orig; }
+                    });
+            });
+        }
 
-    document.querySelectorAll('.ss-tl-item, .ss-press-card, .ss-ach-card').forEach(el => {
-        el.classList.add('anim-hidden');
-        observer.observe(el);
-    });
-});
+        /* ══════════════════════════════════════
+           7.  GALLERY FILTER (gallery.php)
+           ══════════════════════════════════════ */
+        document.querySelectorAll('.filter-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.filter-btn').forEach(function (b) {
+                    b.classList.remove('active');
+                });
+                btn.classList.add('active');
+                var cat = btn.getAttribute('data-cat');
+                document.querySelectorAll('.gallery-item').forEach(function (item) {
+                    if (cat === 'all' || item.getAttribute('data-cat') === cat) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+    }); // end window.load
+
+})();
