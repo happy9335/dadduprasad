@@ -28,46 +28,50 @@ if (empty($sliders)) {
 }
 ?>
 
-<!-- ══════════ HERO ══════════ -->
-<section class="ss-hero">
-    <!-- Swiper -->
+<!-- ══════════ HERO (Supriya Sule Style: Split Light/Photo) ══════════ -->
+<section class="ss-hero-v2">
     <div class="swiper ss-swiper">
         <div class="swiper-wrapper">
-            <?php foreach($sliders as $sl): ?>
-            <div class="swiper-slide">
-                <div class="ss-slide-bg" style="background-image:url('<?= htmlspecialchars($sl['image_url']) ?>')"></div>
-                <div class="ss-slide-dark"></div>
-                <div class="container ss-slide-text">
-                    <p class="ss-pre-title" data-hi="पूर्व कैबिनेट मंत्री, उत्तर प्रदेश" data-en="Former Cabinet Minister, Uttar Pradesh">पूर्व कैबिनेट मंत्री, उत्तर प्रदेश</p>
-                    <h1 class="ss-hero-title" data-hi="<?= htmlspecialchars($sl['title_hi'] ?? $tagline_hi) ?>" data-en="<?= htmlspecialchars($sl['title_en'] ?? $tagline_en) ?>">
-                        <?= nl2br(htmlspecialchars($sl['title_hi'] ?? $tagline_hi)) ?>
-                    </h1>
-                    <div class="ss-hero-links">
-                        <a href="press.php" class="ss-hero-link" data-hi="प्रेस विज्ञप्ति" data-en="Press Notes"><i class="fas fa-newspaper"></i> प्रेस विज्ञप्ति</a>
-                        <a href="gallery.php" class="ss-hero-link" data-hi="डिजिटल मीडिया" data-en="Digital Media"><i class="fas fa-photo-video"></i> डिजिटल मीडिया</a>
-                        <a href="contact.php" class="ss-hero-link" data-hi="जनसुनवाई कार्यक्रम" data-en="Public Hearings"><i class="fas fa-calendar-alt"></i> जनसुनवाई</a>
+            <?php foreach($sliders as $idx => $sl): ?>
+            <div class="swiper-slide ss-slide-v2">
+                <!-- Left: light gradient with text -->
+                <div class="ss-slide-left">
+                    <div class="ss-slide-content">
+                        <p class="ss-slide-label" data-hi="पूर्व कैबिनेट मंत्री · उत्तर प्रदेश" data-en="Former Cabinet Minister · Uttar Pradesh">
+                            पूर्व कैबिनेट मंत्री · उत्तर प्रदेश
+                        </p>
+                        <h1 class="ss-slide-heading" data-hi="<?= htmlspecialchars($sl['title_hi'] ?? $tagline_hi) ?>" data-en="<?= htmlspecialchars($sl['title_en'] ?? $tagline_en) ?>">
+                            <?= htmlspecialchars(mb_substr($sl['title_hi'] ?? $tagline_hi, 0, 40)) ?>
+                            <span><?= htmlspecialchars(mb_substr($sl['title_hi'] ?? $tagline_hi, 40)) ?></span>
+                        </h1>
+                        <div class="ss-slide-actions">
+                            <a href="about.php" class="ss-btn-slide-primary" data-hi="परिचय पढ़ें" data-en="Read More">परिचय पढ़ें</a>
+                            <a href="contact.php" class="ss-btn-slide-ghost" data-hi="संपर्क करें" data-en="Contact Us">संपर्क करें</a>
+                        </div>
+                        <div class="ss-slide-links">
+                            <a href="press.php"><i class="fas fa-newspaper"></i> <span data-hi="प्रेस" data-en="Press">प्रेस</span></a>
+                            <a href="gallery.php"><i class="fas fa-images"></i> <span data-hi="गैलरी" data-en="Gallery">गैलरी</span></a>
+                            <a href="contact.php"><i class="fas fa-calendar-alt"></i> <span data-hi="जनसुनवाई" data-en="Public Hearing">जनसुनवाई</span></a>
+                        </div>
                     </div>
                 </div>
+                <!-- Right: Big photo -->
+                <div class="ss-slide-right" style="background-image:url('<?= htmlspecialchars($sl['image_url']) ?>')"></div>
             </div>
             <?php endforeach; ?>
         </div>
-        <div class="swiper-pagination ss-dots"></div>
-        <div class="swiper-button-prev ss-prev"></div>
-        <div class="swiper-button-next ss-next"></div>
+        <div class="swiper-pagination ss-dots-v2"></div>
+        <div class="swiper-button-prev ss-prev-v2"></div>
+        <div class="swiper-button-next ss-next-v2"></div>
     </div>
 
-    <!-- Floating Quote Panel (like supriyassule.in) -->
-    <div class="ss-quote-panel container">
-        <div class="ss-quote-inner">
-            <div class="ss-quote-body">
-                <p class="ss-quote-text" data-hi="<?= htmlspecialchars($tagline_hi) ?>" data-en="<?= htmlspecialchars($tagline_en) ?>">
-                    <?= htmlspecialchars($tagline_hi) ?>
-                </p>
-                <small data-hi="नागरिक जुड़ाव कानून और सार्वजनिक नीति निर्माण में महत्वपूर्ण है।" data-en="Citizen Engagement is extremely important in legislation and public policy making processes.">
-                    नागरिक जुड़ाव कानून और सार्वजनिक नीति निर्माण में महत्वपूर्ण है।
-                </small>
+    <!-- Bottom info strip -->
+    <div class="ss-hero-strip">
+        <div class="container">
+            <div class="ss-hero-strip-inner">
+                <p data-hi="<?= htmlspecialchars($tagline_hi) ?>" data-en="<?= htmlspecialchars($tagline_en) ?>"><?= htmlspecialchars(mb_substr($tagline_hi,0,80)) ?>...</p>
+                <a href="about.php" data-hi="अधिक जानें →" data-en="Know More →">अधिक जानें →</a>
             </div>
-            <a href="contact.php" class="ss-know-more" data-hi="अधिक जानें" data-en="Know More">अधिक जानें <i class="fas fa-arrow-right ms-1"></i></a>
         </div>
     </div>
 </section>
