@@ -1,25 +1,19 @@
 <?php
 require_once 'db.php';
 
-// Settings helper
-function getSettingVal($pdo, $key) {
-    static $cache = null;
-    if ($cache === null) {
-        $stmt = $pdo->query("SELECT setting_key, value_hi, value_en FROM settings");
-        $cache = [];
-        while ($row = $stmt->fetch()) {
-            $cache[$row['setting_key']] = $row;
+// Settings helper (cached, won't duplicate from db.php)
+if (!function_exists('getSettingVal')) {
+    function getSettingVal($pdo, $key) {
+        static $cache = null;
+        if ($cache === null) {
+            $stmt = $pdo->query("SELECT setting_key, value_hi, value_en FROM settings");
+            $cache = [];
+            while ($row = $stmt->fetch()) {
+                $cache[$row['setting_key']] = $row;
+            }
         }
+        return isset($cache[$key]) ? $cache[$key] : ['value_hi' => '', 'value_en' => ''];
     }
-    return isset($cache[$key]) ? $cache[$key] : ['value_hi' => '', 'value_en' => ''];
-}
-
-// YouTube embed URL helper
-function getYoutubeEmbedUrl($url) {
-    if (preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/', $url, $m)) {
-        return 'https://www.youtube-nocookie.com/embed/' . $m[1] . '?rel=0&showinfo=0';
-    }
-    return $url;
 }
 
 $contact_phone   = getSettingVal($pdo, 'contact_phone');
@@ -33,316 +27,300 @@ $currentPage     = basename($_SERVER['PHP_SELF']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-hi="माननीय दद्दू प्रसाद - पूर्व कैबिनेट मंत्री, उत्तर प्रदेश" data-en="Hon'ble Daddoo Prasad - Former Cabinet Minister, Uttar Pradesh">माननीय दद्दू प्रसाद - पूर्व कैबिनेट मंत्री</title>
-    <meta name="description" content="Official website of Hon'ble Daddoo Prasad Ji, Former Cabinet Minister, Government of Uttar Pradesh. National Convenor, Samajik Parivartan Mission, India.">
+    <title>माननीय दद्दू प्रसाद - पूर्व कैबिनेट मंत्री, उत्तर प्रदेश</title>
+    <meta name="description" content="Official website of Hon'ble Daddoo Prasad Ji, Former Cabinet Minister, UP. National Convenor, Samajik Parivartan Mission, India.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&family=Mukta:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- Icon Libraries -->
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Swiper -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
 
-    <!-- Bootstrap (layout only) -->
+    <!-- Bootstrap grid only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Site CSS -->
-    <link rel="stylesheet" href="<?= strpos($currentPage, 'admin') !== false ? '../style.css' : 'style.css' ?>">
+    <link rel="stylesheet" href="style.css">
 
     <style>
-    /* ════ HEADER RESET ════ */
-    /* Top info bar */
-    .site-topbar {
-        background: #002266;
-        padding: 6px 0;
-        font-size: 0.78rem;
-        color: rgba(255,255,255,0.8);
-    }
-    .site-topbar a { color: rgba(255,255,255,0.7); text-decoration: none; margin-right: 18px; }
-    .site-topbar a:hover { color: #FECB00; }
-    .site-topbar i { color: #FECB00; margin-right: 4px; }
-    .topbar-inner { display: flex; justify-content: space-between; align-items: center; }
-    .topbar-lang button {
-        background: transparent;
-        border: 1px solid rgba(255,255,255,0.3);
-        color: rgba(255,255,255,0.8);
-        padding: 2px 12px;
-        border-radius: 3px;
-        font-size: 0.78rem;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-    .topbar-lang button:hover { background: #FECB00; color: #002266; border-color: #FECB00; }
+    /* ─── SS HEADER STYLE (matching supriyassule.in) ─── */
 
-    /* Identity bar (name + logo) */
-    .site-identity {
-        background: #003893;
-        padding: 10px 0;
-        position: relative;
-        overflow: hidden;
-    }
-    .site-identity::before {
-        content: '';
-        position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-        background: linear-gradient(135deg, #003893 60%, #002266 100%);
-        z-index: 0;
-    }
-    .identity-inner {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        position: relative;
-        z-index: 1;
-    }
-    .identity-flag {
-        display: flex;
-        gap: 4px;
-        align-items: center;
-        flex-shrink: 0;
-    }
-    .identity-flag .flag-stripe {
-        width: 6px;
-        height: 46px;
-        border-radius: 3px;
-    }
-    .flag-stripe.s1 { background: #FF6F00; }
-    .flag-stripe.s2 { background: #f5f5f5; }
-    .flag-stripe.s3 { background: #FECB00; }
-    .flag-stripe.s4 { background: #003893; }
-
-    .identity-photo {
-        width: 52px; height: 52px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #FECB00;
-        flex-shrink: 0;
-    }
-    .identity-text { flex: 1; min-width: 0; }
-    .identity-name {
-        font-family: 'Mukta', 'Noto Sans Devanagari', sans-serif;
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: #fff;
-        margin: 0;
-        line-height: 1.2;
-        letter-spacing: -0.3px;
-    }
-    .identity-title {
-        font-size: 0.78rem;
-        color: rgba(255,255,255,0.75);
-        margin: 2px 0 0;
-        font-weight: 500;
-    }
-    .identity-tagline {
-        font-size: 0.73rem;
-        color: #FECB00;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        margin: 3px 0 0;
-    }
-
-    .identity-icons {
-        display: flex;
-        gap: 8px;
-        flex-shrink: 0;
-    }
-    .identity-icons img {
-        width: 44px; height: 44px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid rgba(255,255,255,0.3);
-    }
-
-    /* Main navigation */
-    .site-nav {
+    * { box-sizing: border-box; }
+    body {
+        font-family: 'Hind', 'Mukta', 'Noto Sans Devanagari', sans-serif;
+        margin: 0; padding: 0;
         background: #fff;
-        border-bottom: 3px solid #FECB00;
+        color: #1a202c;
+    }
+
+    /* White top nav bar */
+    .ss-header {
+        background: #fff;
+        border-bottom: 1px solid #e8edf3;
         position: sticky;
         top: 0;
         z-index: 1000;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
     }
-    .nav-inner {
+    .ss-header-inner {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        padding: 0;
+        height: 70px;
     }
-    .nav-links-list {
+
+    /* Logo */
+    .ss-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        flex-shrink: 0;
+    }
+    .ss-logo-img {
+        width: 52px; height: 52px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #003893;
+    }
+    .ss-logo-text strong {
+        display: block;
+        font-family: 'Mukta', sans-serif;
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #003893;
+        line-height: 1.2;
+    }
+    .ss-logo-text span {
+        display: block;
+        font-size: 0.7rem;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    /* Nav links */
+    .ss-nav-list {
         display: flex;
         list-style: none;
-        margin: 0;
-        padding: 0;
-        gap: 0;
+        margin: 0; padding: 0;
+        height: 70px;
+        align-items: stretch;
     }
-    .nav-links-list > li > a {
-        display: block;
-        padding: 14px 18px;
+    .ss-nav-list > li { display: flex; align-items: stretch; }
+    .ss-nav-list > li > a {
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
         font-size: 0.88rem;
         font-weight: 600;
         color: #1a202c;
         text-decoration: none;
         position: relative;
-        transition: color 0.2s;
         white-space: nowrap;
+        transition: color 0.2s;
     }
-    .nav-links-list > li > a::after {
+    .ss-nav-list > li > a::after {
         content: '';
         position: absolute;
-        bottom: 0; left: 16px; right: 16px;
+        bottom: 0; left: 10px; right: 10px;
         height: 3px;
         background: #003893;
         border-radius: 2px 2px 0 0;
         transform: scaleX(0);
         transition: transform 0.25s;
     }
-    .nav-links-list > li > a:hover,
-    .nav-links-list > li > a.active {
-        color: #003893;
-    }
-    .nav-links-list > li > a:hover::after,
-    .nav-links-list > li > a.active::after {
-        transform: scaleX(1);
-    }
-    .nav-links-list > li > a.active {
-        color: #003893;
-        font-weight: 700;
-    }
+    .ss-nav-list > li > a:hover { color: #003893; }
+    .ss-nav-list > li > a:hover::after,
+    .ss-nav-list > li > a.active::after { transform: scaleX(1); }
+    .ss-nav-list > li > a.active { color: #003893; font-weight: 700; }
 
-    /* Hamburger */
-    .nav-hamburger {
+    /* CTA Button */
+    .ss-nav-cta {
+        background: #003893;
+        color: #fff !important;
+        padding: 10px 20px !important;
+        border-radius: 4px !important;
+        margin-left: 12px;
+        align-self: center !important;
+        font-size: 0.82rem !important;
+        transition: background 0.2s !important;
+    }
+    .ss-nav-cta:hover { background: #002266 !important; color: #fff !important; }
+    .ss-nav-cta::after { display: none !important; }
+
+    /* Lang toggle */
+    .ss-lang-btn {
+        background: none;
+        border: 1px solid #d1d5db;
+        color: #6b7280;
+        padding: 6px 14px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-left: 8px;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+    .ss-lang-btn:hover { border-color: #003893; color: #003893; }
+
+    /* Hamburger for mobile */
+    .ss-hamburger {
         display: none;
         background: none;
         border: 1px solid #003893;
         color: #003893;
-        padding: 7px 12px;
+        padding: 8px 12px;
         border-radius: 4px;
         cursor: pointer;
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 
-    /* Mobile drawer */
-    @media (max-width: 900px) {
-        .site-topbar .topbar-left { display: none; }
-        .identity-icons { display: none; }
-        .identity-name { font-size: 1.2rem; }
+    /* Left Social Sidebar (like supriyassule.in) */
+    .ss-side-social {
+        position: fixed;
+        left: 0; top: 50%;
+        transform: translateY(-50%);
+        z-index: 999;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 10px 8px;
+    }
+    .ss-side-social a {
+        width: 38px; height: 38px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        color: inherit;
+        text-decoration: none;
+        border: 2px solid currentColor;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+        background: #fff;
+    }
+    .ss-side-social a:hover { transform: scale(1.1); }
+    .ss-side-social a.fb  { color: #1877F2; }
+    .ss-side-social a.tw  { color: #1DA1F2; }
+    .ss-side-social a.ig  { color: #E1306C; }
+    .ss-side-social a.yt  { color: #FF0000; }
 
-        .nav-hamburger { display: block; }
-        .nav-links-list {
+    /* Buddhist Flag stripe (thin, below header) */
+    .ss-flag-bar {
+        height: 5px;
+        display: flex;
+    }
+    .ss-flag-bar span {
+        flex: 1;
+        display: block;
+    }
+
+    /* Mobile nav */
+    @media (max-width: 900px) {
+        .ss-hamburger { display: block; }
+        .ss-nav-list {
             display: none;
-            flex-direction: column;
             position: absolute;
-            top: 100%; left: 0; right: 0;
+            top: 70px; left: 0; right: 0;
             background: #fff;
+            flex-direction: column;
             border-top: 3px solid #003893;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            height: auto;
             z-index: 999;
             padding: 8px 0;
         }
-        .nav-links-list.open { display: flex; }
-        .nav-links-list > li > a { padding: 13px 20px; border-bottom: 1px solid #f0f0f0; }
-        .nav-links-list > li > a::after { display: none; }
-        .site-nav { position: sticky; }
-        .nav-inner { position: relative; }
+        .ss-nav-list.open { display: flex; }
+        .ss-nav-list > li { height: 46px; }
+        .ss-nav-list > li > a { padding: 0 20px; border-bottom: 1px solid #f0f4f8; font-size: 0.95rem; }
+        .ss-nav-list > li > a::after { display: none; }
+        .ss-nav-cta { display: none; }
+        .ss-side-social { display: none; }
     }
     @media (max-width: 576px) {
-        .identity-photo { width: 40px; height: 40px; }
-        .identity-name { font-size: 1.05rem; }
-        .identity-title { font-size: 0.7rem; }
+        .ss-logo-text span { display: none; }
+        .ss-logo-text strong { font-size: 1rem; }
     }
     </style>
 </head>
 <body>
 
-<!-- ── Top Info Bar ── -->
-<div class="site-topbar d-none d-md-block">
+<!-- ── Left Social Sidebar ── -->
+<div class="ss-side-social d-none d-xl-flex">
+    <a href="https://www.facebook.com/dadduprasadoffice/" class="fb" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://twitter.com/dadduprasad" class="tw" target="_blank" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+    <a href="https://instagram.com/daddu.prasad" class="ig" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    <a href="https://www.youtube.com/@DadduPrasad" class="yt" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+</div>
+
+<!-- ── Sticky Top Navigation ── -->
+<header class="ss-header">
     <div class="container">
-        <div class="topbar-inner">
-            <div class="topbar-left">
-                <a href="tel:<?= htmlspecialchars($contact_phone['value_en'] ?: '') ?>">
-                    <i class="fas fa-phone"></i><?= htmlspecialchars($contact_phone['value_hi'] ?: '+91-XXXXXXXXXX') ?>
-                </a>
-                <a href="mailto:<?= htmlspecialchars($contact_email['value_en'] ?: '') ?>">
-                    <i class="fas fa-envelope"></i><?= htmlspecialchars($contact_email['value_hi'] ?: 'info@dadduprasad.in') ?>
-                </a>
-                <span>
-                    <i class="fas fa-clock"></i><?= htmlspecialchars($contact_hours['value_hi'] ?: 'सुबह 10:00 - दोपहर 2:00') ?>
-                </span>
-            </div>
-            <div class="topbar-lang">
-                <button id="langToggle" aria-label="Toggle Language">
-                    <span class="lang-text">A/अ</span> English
+        <div class="ss-header-inner">
+
+            <!-- Logo -->
+            <a href="index.php" class="ss-logo">
+                <img src="https://ui-avatars.com/api/?name=DP&background=003893&color=FECB00&size=100&bold=true&font-size=0.45" alt="दद्दू प्रसाद" class="ss-logo-img">
+                <div class="ss-logo-text">
+                    <strong data-hi="दद्दू प्रसाद" data-en="Daddoo Prasad">दद्दू प्रसाद</strong>
+                    <span data-hi="पूर्व कैबिनेट मंत्री" data-en="Former Cabinet Minister">पूर्व कैबिनेट मंत्री</span>
+                </div>
+            </a>
+
+            <!-- Navigation + CTA -->
+            <nav>
+                <ul class="ss-nav-list" id="mainNavList">
+                    <li><a href="index.php"       class="<?= $currentPage=='index.php'?'active':'' ?>" data-hi="होम"         data-en="Home"        >होम</a></li>
+                    <li><a href="about.php"        class="<?= $currentPage=='about.php'?'active':'' ?>" data-hi="परिचय"       data-en="About"       >परिचय</a></li>
+                    <li><a href="achievements.php" class="<?= $currentPage=='achievements.php'?'active':'' ?>" data-hi="उपलब्धियां" data-en="Achievements">उपलब्धियां</a></li>
+                    <li><a href="press.php"        class="<?= $currentPage=='press.php'?'active':'' ?>" data-hi="प्रेस"        data-en="Press"       >प्रेस</a></li>
+                    <li><a href="gallery.php"      class="<?= $currentPage=='gallery.php'?'active':'' ?>" data-hi="गैलरी"       data-en="Gallery"     >गैलरी</a></li>
+                    <li><a href="contact.php"      class="<?= $currentPage=='contact.php'?'active':'' ?>" data-hi="संपर्क"      data-en="Contact"     >संपर्क</a></li>
+                    <li><a href="contact.php" class="ss-nav-cta" data-hi="#जुड़ें" data-en="#Connect">#जुड़ें</a></li>
+                </ul>
+            </nav>
+
+            <!-- Right side -->
+            <div class="d-flex align-items-center">
+                <button id="langToggle" class="ss-lang-btn" aria-label="Toggle Language">
+                    <i class="fas fa-language me-1"></i>EN
+                </button>
+                <button class="ss-hamburger ms-2" id="navToggle" aria-label="Menu">
+                    <i class="fas fa-bars"></i>
                 </button>
             </div>
         </div>
     </div>
+</header>
+
+<!-- Buddhist Flag Stripe Bar -->
+<div class="ss-flag-bar">
+    <span style="background:#FF6F00"></span>
+    <span style="background:#ffffff;border-top:1px solid #e8edf3"></span>
+    <span style="background:#FECB00"></span>
+    <span style="background:#003893"></span>
 </div>
-
-<!-- ── Identity Bar ── -->
-<div class="site-identity">
-    <div class="container">
-        <div class="identity-inner">
-            <!-- Buddhist flag stripes -->
-            <div class="identity-flag d-none d-md-flex">
-                <div class="flag-stripe s1"></div>
-                <div class="flag-stripe s2"></div>
-                <div class="flag-stripe s3"></div>
-                <div class="flag-stripe s4"></div>
-            </div>
-
-            <!-- Avatar -->
-            <img src="https://ui-avatars.com/api/?name=Daddoo+Prasad&background=003893&color=FECB00&size=100&bold=true" alt="दद्दू प्रसाद" class="identity-photo">
-
-            <!-- Name & Title -->
-            <div class="identity-text">
-                <h1 class="identity-name" data-hi="दद्दू प्रसाद" data-en="Daddoo Prasad">दद्दू प्रसाद</h1>
-                <p class="identity-title" data-hi="पूर्व कैबिनेट मंत्री, उत्तर प्रदेश सरकार | समाजवादी पार्टी वरिष्ठ नेता" data-en="Former Cabinet Minister, Govt. of UP | Senior Samajwadi Party Leader">पूर्व कैबिनेट मंत्री, उत्तर प्रदेश सरकार &nbsp;|&nbsp; समाजवादी पार्टी वरिष्ठ नेता</p>
-                <p class="identity-tagline d-none d-md-block" data-hi="राष्ट्रीय संयोजक · सामाजिक परिवर्तन मिशन, भारत" data-en="National Convenor · Samajik Parivartan Mission, India">राष्ट्रीय संयोजक · सामाजिक परिवर्तन मिशन, भारत</p>
-            </div>
-
-            <!-- Leader icons — lg only -->
-            <div class="identity-icons">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Buddha_in_Sarnath_Museum_%28Dhammajak_Mutra%29.jpg/200px-Buddha_in_Sarnath_Museum_%28Dhammajak_Mutra%29.jpg" alt="Buddha">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Dr._Bhimrao_Ambedkar.jpg/200px-Dr._Bhimrao_Ambedkar.jpg" alt="Dr. Ambedkar">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Kanshi_ram.jpg" alt="Kanshi Ram">
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ── Main Navigation ── -->
-<nav class="site-nav">
-    <div class="container">
-        <div class="nav-inner">
-            <ul class="nav-links-list" id="mainNavList">
-                <li><a href="index.php"        class="<?= $currentPage=='index.php' ?'active':'' ?>" data-hi="होम"        data-en="Home"         >होम</a></li>
-                <li><a href="about.php"         class="<?= $currentPage=='about.php' ?'active':'' ?>" data-hi="परिचय"      data-en="About"        >परिचय</a></li>
-                <li><a href="achievements.php"  class="<?= $currentPage=='achievements.php'?'active':'' ?>" data-hi="उपलब्धियां" data-en="Achievements">उपलब्धियां</a></li>
-                <li><a href="press.php"         class="<?= $currentPage=='press.php' ?'active':'' ?>" data-hi="प्रेस विज्ञप्ति" data-en="Press Notes" >प्रेस</a></li>
-                <li><a href="gallery.php"       class="<?= $currentPage=='gallery.php'?'active':'' ?>" data-hi="गैलरी"      data-en="Media"        >गैलरी</a></li>
-                <li><a href="contact.php"       class="<?= $currentPage=='contact.php'?'active':'' ?>" data-hi="संपर्क"     data-en="Contact"      >संपर्क</a></li>
-            </ul>
-
-            <button class="nav-hamburger" id="navToggle" aria-label="Menu">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-    </div>
-</nav>
 
 <script>
-// Hamburger toggle
-(function() {
+// Hamburger
+(function(){
     var btn = document.getElementById('navToggle');
     var list = document.getElementById('mainNavList');
-    if (btn) btn.addEventListener('click', function() {
+    if(btn) btn.addEventListener('click', function(){
         list.classList.toggle('open');
-        var icon = btn.querySelector('i');
-        icon.className = list.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+        btn.querySelector('i').className = list.classList.contains('open') ? 'fas fa-times' : 'fas fa-bars';
+    });
+    // Close on outside click
+    document.addEventListener('click', function(e){
+        if(btn && list && !btn.contains(e.target) && !list.contains(e.target)){
+            list.classList.remove('open');
+            btn.querySelector('i').className = 'fas fa-bars';
+        }
     });
 })();
 </script>
