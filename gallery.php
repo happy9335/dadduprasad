@@ -355,8 +355,8 @@ foreach ($pressReleasesRaw as $press) {
 <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Fancybox
-    Fancybox.bind('[data-fancybox="unified-gallery"]', {
+    // Initialize Fancybox for ALL elements with a data-fancybox attribute
+    Fancybox.bind('[data-fancybox]', {
         Toolbar: {
             display: {
                 left: ["infobar"],
