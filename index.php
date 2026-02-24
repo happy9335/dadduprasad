@@ -46,6 +46,10 @@
     overflow: hidden !important;
     display: block !important;
     width: 100% !important;
+    max-width: 1440px !important;
+    margin: 0 auto !important;
+    border-radius: 0 0 30px 30px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
     }
     /* Force Swiper to take height */
     .heroSwiper {
@@ -315,7 +319,7 @@
         font-family: 'Mukta', 'Noto Sans Devanagari', sans-serif;
         font-size: 2.6rem;
         font-weight: 800;
-        color: #003893;
+        color: #f97316; /* Orange Section Heading */
         line-height: 1.1;
         margin: 0 0 14px;
     }
@@ -482,7 +486,7 @@
     <style>
     /* ── Press Note ── */
     .sn-press {
-        background: #dce8f9;
+        background: #ffffff; /* White Theme Background */
         padding: 52px 0 56px;
     }
     .sn-head {
@@ -494,7 +498,8 @@
     .sn-heading {
         font-family: 'Mukta','Noto Sans Devanagari',sans-serif;
         font-size: 2rem; font-weight: 800;
-        color: #003893; margin: 0 0 10px;
+        color: #f97316; /* Orange section heading */
+        margin: 0 0 10px;
     }
     .sn-rule { width: 44px; height: 4px; background: #D21034; border-radius: 2px; }
     .sn-viewall {
@@ -562,22 +567,15 @@
     .sn-ach {
         position: relative;
         padding: 52px 0 56px;
+        background: #ffffff; /* White Theme Background */
         overflow: hidden;
-    }
-    /* Crowd background image — darkened */
-    .sn-ach::before {
-        content: '';
-        position: absolute; inset: 0;
-        background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1600&q=80');
-        background-size: cover; background-position: center;
-        filter: brightness(0.22);
-        z-index: 0;
     }
     .sn-ach-inner { position: relative; z-index: 1; }
     .sn-ach-heading {
         font-family: 'Mukta','Noto Sans Devanagari',sans-serif;
         font-size: 2rem; font-weight: 800;
-        color: #fff; margin: 0 0 10px;
+        color: #f97316; /* Orange section heading */
+        margin: 0 0 10px;
     }
     .sn-ach-rule { width: 44px; height: 4px; background: #D21034; border-radius: 2px; margin-bottom: 28px; }
 
@@ -588,18 +586,22 @@
         gap: 14px;
     }
     .sn-ach-card {
-        background: rgba(255,255,255,.10);
-        border: 1px solid rgba(255,255,255,.18);
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
         border-radius: 8px; overflow: hidden;
         text-decoration: none; display: block;
-        backdrop-filter: blur(3px);
-        transition: background .25s, transform .25s;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        transition: transform .25s, box-shadow .25s;
     }
-    .sn-ach-card:hover { background: rgba(255,255,255,.22); transform: translateY(-5px); }
+    .sn-ach-card:hover { 
+        background: #ffffff; 
+        transform: translateY(-5px); 
+        box-shadow: 0 10px 25px rgba(0,56,147,0.15); 
+    }
 
     .sn-ach-thumb {
         width: 100%; height: 120px; overflow: hidden;
-        background: rgba(255,255,255,.06);
+        background: #e2e8f0;
         display: flex; align-items: center; justify-content: center;
     }
     .sn-ach-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
@@ -608,7 +610,7 @@
     .sn-ach-label {
         padding: 9px 10px;
         font-size: .78rem; font-weight: 700;
-        color: rgba(255,255,255,.92);
+        color: #003893; /* Dark Blue text */
         line-height: 1.4; text-align: center;
     }
 
@@ -672,7 +674,7 @@
                     </h2>
                     <div class="sn-ach-rule"></div>
                 </div>
-                <a href="achievements.php" class="sn-viewall" style="border-color:rgba(255,255,255,.55);color:#fff;" data-hi="सभी देखें" data-en="View all">
+                <a href="achievements.php" class="sn-viewall" data-hi="सभी देखें" data-en="View all">
                     View all <i class="fas fa-plus-circle"></i>
                 </a>
             </div>
@@ -718,7 +720,7 @@
     /* ── Section wrapper ── */
     .pj2-section {
         padding: 72px 0 80px;
-        background: linear-gradient(160deg, #f8faff 0%, #edf2ff 50%, #fff 100%);
+        background: #ffffff; /* White Theme Background */
         position: relative;
         overflow: hidden;
     }
@@ -729,7 +731,7 @@
         right: -120px; top: -120px;
         width: 420px; height: 420px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(0,56,147,.07) 0%, transparent 70%);
+        background: radial-gradient(circle, rgba(0,56,147,.04) 0%, transparent 70%);
         pointer-events: none;
     }
 
@@ -742,7 +744,8 @@
     .pj2-title {
         font-family: 'Mukta','Noto Sans Devanagari',sans-serif;
         font-size: 2.2rem; font-weight: 800;
-        color: #003893; margin: 0 0 10px;
+        color: #f97316; /* Orange section heading */
+        margin: 0 0 10px;
     }
     .pj2-subtitle {
         font-size: .95rem; color: #64748b;
@@ -1013,7 +1016,7 @@
     <style>
     .sc-section {
         padding: 60px 0;
-        background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+        background: #ffffff;
         border-top: 1px solid #e2e8f0;
     }
     .sc-header {
@@ -1024,7 +1027,7 @@
         font-family: 'Mukta', sans-serif;
         font-size: clamp(1.8rem, 3vw, 2.4rem);
         font-weight: 800;
-        color: #003893;
+        color: #f97316; /* Orange section heading */
         margin-bottom: 8px;
     }
     .sc-title-underline {
