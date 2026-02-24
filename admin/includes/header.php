@@ -120,6 +120,9 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 <li class="<?= $currentPage == 'manage_press.php' ? 'active' : '' ?>">
                     <a href="manage_press.php"><i class="fas fa-newspaper"></i> Press Releases</a>
                 </li>
+                <li class="<?= $currentPage == 'manage_blogs.php' ? 'active' : '' ?>">
+                    <a href="manage_blogs.php"><i class="fas fa-blog"></i> Manage Blog Posts</a>
+                </li>
                 <li class="<?= $currentPage == 'manage_gallery.php' ? 'active' : '' ?>">
                     <a href="manage_gallery.php"><i class="fas fa-images"></i> Media Gallery</a>
                 </li>

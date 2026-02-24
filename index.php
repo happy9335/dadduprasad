@@ -18,6 +18,7 @@
     $achievements = $pdo->query("SELECT * FROM achievements      ORDER BY display_order  ASC  LIMIT 6")->fetchAll();
     $journey      = $pdo->query("SELECT * FROM biography         ORDER BY display_order  ASC")->fetchAll();
     $media        = $pdo->query("SELECT * FROM media_gallery ORDER BY display_order ASC")->fetchAll();
+    $latestBlogs  = $pdo->query("SELECT * FROM blog_posts ORDER BY publish_date DESC LIMIT 3")->fetchAll();
 
     /* Fallback demo — DB rows from your SQL */
     if (empty($sliders)) {
@@ -46,16 +47,12 @@
     overflow: hidden !important;
     display: block !important;
     width: 100% !important;
-    max-width: 1440px !important;
-    margin: 0 auto !important;
-    border-radius: 0 0 30px 30px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
     }
     /* Force Swiper to take height */
     .heroSwiper {
     width: 100% !important;
-    height: 88vh !important;
-    min-height: 540px !important;
+    height: 65vh !important;
+    min-height: 450px !important;
     display: block !important;
     }
     .heroSwiper .swiper-wrapper {
@@ -104,8 +101,8 @@
     padding: 0 0 80px;   /* pull up, leave room for bottom strip */
     }
     .hero-slide-content {
-    max-width: 640px;
-    padding: 0 40px;
+    max-width: 750px;
+    padding: 0 40px 0 10vw; /* Increased from 6vw to 10vw to push text further right */
     }
 
     .hero-kicker {
@@ -218,23 +215,23 @@
     }
 
     /* Responsive */
-    @media (max-width: 992px) { .heroSwiper { height: 78vh; min-height: 420px; } }
+    @media (max-width: 992px) { .heroSwiper { height: 60vh; min-height: 400px; } }
     @media (max-width: 768px) {
-    .heroSwiper { height: 72vh; min-height: 380px; }
+    .heroSwiper { height: 55vh; min-height: 380px; }
     .hero-slide-content { padding: 0 20px; }
     .hero-title { font-size: 1.6rem; }
     .hero-actions { flex-direction: column; gap: 10px; }
     .hero-strip-inner { flex-direction: column; gap: 6px; text-align: center; }
     }
     @media (max-width: 480px) {
-    .heroSwiper { height: 65vh; min-height: 320px; }
+    .heroSwiper { height: 50vh; min-height: 320px; }
     .hero-title { font-size: 1.3rem; }
     .hero-links { gap: 10px; }
     }
     </style>
 
     <div class="hero-wrap" style="position:relative;overflow:hidden;display:block;width:100%;">
-        <div class="swiper heroSwiper" style="width:100%;height:88vh;min-height:540px;display:block;overflow:hidden;">
+        <div class="swiper heroSwiper" style="width:100%;height:65vh;min-height:450px;display:block;overflow:hidden;">
             <div class="swiper-wrapper" style="height:100%;">
                 <?php foreach ($sliders as $sl): ?>
                 <div class="swiper-slide" style="position:relative;width:100%;height:100%;overflow:hidden;">
@@ -1009,6 +1006,114 @@
 
 
    
+
+    <!-- ═══════════════════════════════════
+         LATEST BLOGS SECTION
+         ═══════════════════════════════════ -->
+    <style>
+    .hm-blog-bg {
+        background: #f8fafc;
+        padding: 70px 0;
+    }
+    .hm-blog-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 30px;
+    }
+    .hm-blog-title {
+        font-family: 'Mukta','Noto Sans Devanagari',sans-serif;
+        font-size: 2.2rem; font-weight: 800;
+        color: #f97316; margin: 0 0 10px;
+    }
+    .hm-blog-rule { width: 50px; height: 4px; background: #D21034; border-radius: 2px; }
+    .hm-blog-viewall {
+        display: inline-flex; align-items: center; gap: 6px;
+        border: 2px solid #003893; color: #003893;
+        padding: 6px 16px; border-radius: 20px;
+        font-weight: 700; font-size: .84rem;
+        text-decoration: none; transition: all .2s; white-space: nowrap; margin-top: 4px;
+    }
+    .hm-blog-viewall:hover { background: #003893; color: #fff; }
+    
+    .hm-blog-card {
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        transition: transform .3s, box-shadow .3s;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+    }
+    .hm-blog-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,56,147,0.15); }
+    .hm-blog-img {
+        width: 100%; height: 180px;
+        object-fit: cover;
+    }
+    .hm-blog-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+    .hm-blog-date {
+        font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 8px;
+    }
+    .hm-blog-heading {
+        font-family: 'Mukta', sans-serif;
+        font-size: 1.1rem; font-weight: 700; color: #003893;
+        margin-bottom: 10px; line-height: 1.4;
+    }
+    .hm-blog-excerpt {
+        font-size: 0.9rem; color: #4a5568; line-height: 1.6; margin-bottom: 15px; flex-grow: 1;
+    }
+    .hm-blog-read {
+        font-size: 0.85rem; font-weight: 700; color: #D21034;
+    }
+    </style>
+
+    <section class="hm-blog-bg">
+        <div class="container">
+            <div class="hm-blog-head">
+                <div>
+                    <h2 class="hm-blog-title" data-hi="दैनिक विचार एवं ब्लॉग" data-en="Daily Thoughts & Blog">दैनिक विचार एवं ब्लॉग</h2>
+                    <div class="hm-blog-rule"></div>
+                </div>
+                <a href="blog.php" class="hm-blog-viewall" data-hi="सभी पढ़ें" data-en="Read all">
+                    Read all <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="row g-4">
+                <?php 
+                $fallbackBlogImgs = [
+                    'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=400&q=80',
+                    'https://images.unsplash.com/photo-1555848962-6e79363ec58f?w=400&q=80',
+                    'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&q=80'
+                ];
+                foreach ($latestBlogs as $idx => $post): 
+                    $title   = $post['title_hi'];
+                    $content = $post['content_hi'];
+                    $imgUrl  = (!empty($post['image_url'])) ? $post['image_url'] : $fallbackBlogImgs[$idx % 3];
+                    $excerpt = mb_substr(strip_tags($content), 0, 100) . '...';
+                ?>
+                <div class="col-lg-4 col-md-6">
+                    <a href="blog_detail.php?id=<?= $post['id'] ?>" class="hm-blog-card">
+                        <img src="<?= htmlspecialchars(strpos($imgUrl, 'http') === 0 ? $imgUrl : $imgUrl) ?>" alt="<?= htmlspecialchars($title) ?>" class="hm-blog-img">
+                        <div class="hm-blog-body">
+                            <div class="hm-blog-date"><i class="far fa-calendar-alt"></i> <?= date('d M Y', strtotime($post['publish_date'])) ?></div>
+                            <h3 class="hm-blog-heading"><?= htmlspecialchars($title) ?></h3>
+                            <p class="hm-blog-excerpt"><?= htmlspecialchars($excerpt) ?></p>
+                            <div class="hm-blog-read">पूरा पढ़ें &rarr;</div>
+                        </div>
+                    </a>
+                </div>
+                <?php endforeach; ?>
+
+                <?php if (empty($latestBlogs)): ?>
+                    <div class="col-12 text-center text-muted">अभी कोई पोस्ट उपलब्ध नहीं है।</div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </section>
 
     <!-- ═══════════════════════════════════
         STAY CONNECTED SECTION

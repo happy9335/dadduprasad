@@ -279,6 +279,7 @@ $currentPage     = basename($_SERVER['PHP_SELF']);
                     <li><a href="about.php"        class="<?= $currentPage=='about.php'?'active':'' ?>" data-hi="परिचय"       data-en="About"       >परिचय</a></li>
                     <li><a href="achievements.php" class="<?= $currentPage=='achievements.php'?'active':'' ?>" data-hi="उपलब्धियां" data-en="Achievements">उपलब्धियां</a></li>
                     <li><a href="press.php"        class="<?= $currentPage=='press.php'?'active':'' ?>" data-hi="प्रेस"        data-en="Press"       >प्रेस</a></li>
+                    <li><a href="blog.php"         class="<?= $currentPage=='blog.php'?'active':'' ?>" data-hi="ब्लॉग"         data-en="Blog"        >ब्लॉग</a></li>
                     <li><a href="gallery.php"      class="<?= $currentPage=='gallery.php'?'active':'' ?>" data-hi="गैलरी"       data-en="Gallery"     >गैलरी</a></li>
                     <li><a href="contact.php"      class="<?= $currentPage=='contact.php'?'active':'' ?>" data-hi="संपर्क"      data-en="Contact"     >संपर्क</a></li>
                     <li><a href="contact.php" class="ss-nav-cta" data-hi="#जुड़ें" data-en="#Connect">#जुड़ें</a></li>
