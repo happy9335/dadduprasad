@@ -1,0 +1,14 @@
+# Database / sensitive files
+db.php
+process_contact.php
+uploads/
+
+# Temp files
+inject_modern_ui.php
+update_css_banner.php
+append_css.php
+
+# System files
+.DS_Store
+Thumbs.db
+*.log
