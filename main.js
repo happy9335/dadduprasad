@@ -1,185 +1,152 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. Mobile Menu Toggle
-    const menuToggle = document.querySelector('.mobile-menu-toggle');
-    const mainNav = document.querySelector('.main-nav');
-
-    if (menuToggle && mainNav) {
-        menuToggle.addEventListener('click', () => {
-            mainNav.classList.toggle('active');
-        });
-    }
-
-    // Close mobile menu when a link is clicked
-    const navLinksList = document.querySelectorAll('.nav-link');
-    navLinksList.forEach(link => {
-        link.addEventListener('click', () => {
-            if (mainNav.classList.contains('active')) {
-                mainNav.classList.remove('active');
-            }
-        });
-    });
-
-    // 2. Language Toggle
+    // ── 1. Language Toggle ──
     const langToggleBtn = document.getElementById('langToggle');
-    let currentLang = 'hi'; // Default language
+    let currentLang = 'hi';
 
     if (langToggleBtn) {
         langToggleBtn.addEventListener('click', () => {
             currentLang = currentLang === 'hi' ? 'en' : 'hi';
+            langToggleBtn.innerHTML = currentLang === 'hi'
+                ? '<span class="lang-text">A/अ</span> English'
+                : '<span class="lang-text">A/अ</span> हिंदी';
 
-            // Update button text
-            langToggleBtn.innerHTML = currentLang === 'hi' ? '<span class="lang-text">A/अ</span> English' : '<span class="lang-text">A/अ</span> हिंदी';
-
-            // Update all elements with data-hi and data-en attributes
-            const langElements = document.querySelectorAll('[data-hi][data-en]');
-            langElements.forEach(el => {
-                if (el.tagName.toLowerCase() === 'input' || el.tagName.toLowerCase() === 'textarea') {
-                    if (el.hasAttribute('placeholder')) {
-                        el.setAttribute('placeholder', el.getAttribute(`data-${currentLang}`));
-                    }
+            document.querySelectorAll('[data-hi][data-en]').forEach(el => {
+                const val = el.getAttribute('data-' + currentLang);
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    if (el.hasAttribute('placeholder')) el.setAttribute('placeholder', val);
                 } else {
-                    el.innerHTML = el.getAttribute(`data-${currentLang}`);
+                    el.textContent = val;
                 }
             });
 
-            // Update title
             const titleEl = document.querySelector('title');
-            if (titleEl && titleEl.hasAttribute(`data-${currentLang}`)) {
-                document.title = titleEl.getAttribute(`data-${currentLang}`);
+            if (titleEl && titleEl.hasAttribute('data-' + currentLang)) {
+                document.title = titleEl.getAttribute('data-' + currentLang);
             }
         });
     }
 
-    // 3. Gallery Filtering
+    // ── 2. Hero Swiper ──
+    if (typeof Swiper !== 'undefined') {
+        const heroEl = document.querySelector('.ss-swiper');
+        if (heroEl) {
+            new Swiper('.ss-swiper', {
+                loop: true,
+                speed: 800,
+                autoplay: {
+                    delay: 5500,
+                    disableOnInteraction: false,
+                },
+                effect: 'fade',
+                fadeEffect: { crossFade: true },
+                pagination: {
+                    el: '.ss-dots',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.ss-next',
+                    prevEl: '.ss-prev',
+                },
+            });
+        }
+
+        // Legacy / fallback for old heroSwiper class
+        if (document.querySelector('.heroSwiper')) {
+            new Swiper('.heroSwiper', {
+                loop: true,
+                autoplay: { delay: 5000, disableOnInteraction: false },
+                pagination: { el: '.swiper-pagination', clickable: true },
+                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+            });
+        }
+
+        // Generic dpswiper
+        if (document.querySelector('.dpswiper')) {
+            new Swiper('.dpswiper', {
+                loop: true,
+                autoplay: { delay: 5000, disableOnInteraction: false },
+                pagination: { el: '.dp-pagination', clickable: true },
+                navigation: { nextEl: '.dp-arrow-next', prevEl: '.dp-arrow-prev' },
+            });
+        }
+    }
+
+    // ── 3. Gallery Filter ──
     const filterBtns = document.querySelectorAll('.filter-btn');
     const galleryItems = document.querySelectorAll('.gallery-item');
-
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Remove active class from all buttons
             filterBtns.forEach(b => b.classList.remove('active'));
-            // Add active class to clicked button
             btn.classList.add('active');
-
-            const filterValue = btn.getAttribute('data-filter');
-
+            const val = btn.getAttribute('data-filter');
             galleryItems.forEach(item => {
-                if (filterValue === 'all' || item.classList.contains(`filter-${filterValue}`)) {
-                    item.classList.remove('hidden');
-                } else {
-                    item.classList.add('hidden');
-                }
+                item.classList.toggle('hidden', !(val === 'all' || item.classList.contains('filter-' + val)));
             });
         });
     });
 
-    // 4. Contact Form Submission (AJAX)
+    // ── 4. Contact Form AJAX ──
     const contactForm = document.getElementById('contactForm');
     const formResponse = document.getElementById('formResponse');
-
     if (contactForm) {
         contactForm.addEventListener('submit', function (e) {
             e.preventDefault();
-
-            const submitBtn = contactForm.querySelector('button[type="submit"]');
-            const originalBtnText = submitBtn.innerHTML;
-
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ...';
-            submitBtn.disabled = true;
-
-            const formData = new FormData(this);
-
-            fetch(this.getAttribute('action'), {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
+            const btn = contactForm.querySelector('button[type="submit"]');
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ...';
+            btn.disabled = true;
+            fetch(this.getAttribute('action'), { method: 'POST', body: new FormData(this) })
+                .then(r => r.json())
                 .then(data => {
                     formResponse.textContent = data.message;
-                    formResponse.className = 'form-response mt-2';
-
-                    if (data.status === 'success') {
-                        formResponse.classList.add('success');
-                        contactForm.reset();
-                    } else {
-                        formResponse.classList.add('error');
-                    }
+                    formResponse.className = 'form-response mt-2 ' + (data.status === 'success' ? 'success' : 'error');
+                    if (data.status === 'success') contactForm.reset();
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                    formResponse.textContent = 'An error occurred. Please try again later.';
+                .catch(() => {
+                    formResponse.textContent = 'त्रुटि हुई। कृपया पुनः प्रयास करें।';
                     formResponse.className = 'form-response mt-2 error';
                 })
                 .finally(() => {
-                    submitBtn.innerHTML = originalBtnText;
-                    submitBtn.disabled = false;
-
-                    // Hide response after 5 seconds
-                    setTimeout(() => {
-                        formResponse.className = 'form-response mt-2';
-                        formResponse.textContent = '';
-                    }, 5000);
+                    btn.innerHTML = orig; btn.disabled = false;
+                    setTimeout(() => { formResponse.className = 'form-response mt-2'; formResponse.textContent = ''; }, 5000);
                 });
         });
     }
 
-    // 5. Active link update on scroll
-    const sections = document.querySelectorAll('section, footer');
-    const navLinks = document.querySelectorAll('.nav-link');
-
-    window.addEventListener('scroll', () => {
-        let current = '';
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (pageYOffset >= (sectionTop - 200)) {
-                current = section.getAttribute('id');
-            }
-        });
-
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href').includes(current)) {
-                link.classList.add('active');
-            }
-        });
-
-        // Add sticky class to header if scrolled
-        const header = document.querySelector('.main-header');
-        if (window.scrollY > 50) {
-            header.classList.remove('transparent-header');
-            header.style.background = '#fff';
-            header.style.boxShadow = '0 5px 20px rgba(0,0,0,0.2)';
-        } else {
-            // Restore transparency if it's the home page
-            if (window.location.pathname.endsWith('/') || window.location.pathname.endsWith('index.php')) {
-                header.classList.add('transparent-header');
-                header.style.background = 'transparent';
-                header.style.boxShadow = 'none';
-            } else {
-                header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
-            }
-        }
-    });
-
-    // Initialize Hero Swiper
-    if (typeof Swiper !== 'undefined') {
-        const swiper = new Swiper('.heroSwiper', {
-            loop: true,
-            autoplay: {
-                delay: 5000,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-        });
+    // ── 5. Scroll-based nav shadow ──
+    const siteNav = document.querySelector('.site-nav');
+    if (siteNav) {
+        window.addEventListener('scroll', () => {
+            siteNav.style.boxShadow = window.scrollY > 50
+                ? '0 4px 20px rgba(0,56,147,0.15)'
+                : '0 2px 10px rgba(0,0,0,0.08)';
+        }, { passive: true });
     }
 
+    // ── 6. Smooth scroll for anchor links ──
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const target = document.querySelector(a.getAttribute('href'));
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // ── 7. Animation on scroll (fade-in) ──
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('anim-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.ss-tl-item, .ss-press-card, .ss-ach-card').forEach(el => {
+        el.classList.add('anim-hidden');
+        observer.observe(el);
+    });
 });
