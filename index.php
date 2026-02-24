@@ -1,4 +1,4 @@
-    <?php
+﻿    <?php
     require_once 'includes/header.php';
 
     /* ═══ DB FETCH — All sections ═══ */
@@ -284,248 +284,722 @@
 
 
     <!-- ═══════════════════════════════════
-        ABOUT SECTION
-        ═══════════════════════════════════ -->
-    <section class="ss-section ss-about">
-        <div class="container">
-            <div class="row align-items-center g-0">
-                <!-- Portrait column -->
-                <div class="col-lg-4 col-md-5">
-                    <div class="ss-portrait-wrap">
-                        <img src="https://m.media-amazon.com/images/I/51dQBAlC7rL.jpg" alt="दद्दू प्रसाद" class="ss-portrait">
-                        <div class="ss-portrait-label">
-                            <span data-hi="दद्दू प्रसाद" data-en="Daddoo Prasad">दद्दू प्रसाद</span>
-                            <small data-hi="पूर्व कैबिनेट मंत्री" data-en="Former Cabinet Minister">पूर्व कैबिनेट मंत्री</small>
-                        </div>
-                        <div class="ss-portrait-stats">
-                            <div class="ss-stat"><strong>30+</strong><span data-hi="वर्ष सेवा" data-en="Yrs Service">वर्ष सेवा</span></div>
-                            <div class="ss-stat"><strong>SP</strong><span data-hi="वरिष्ठ नेता" data-en="Sr. Leader">वरिष्ठ नेता</span></div>
-                            <div class="ss-stat"><strong>UP</strong><span data-hi="कैबिनेट मंत्री" data-en="Cabinet Min.">कैबिनेट मंत्री</span></div>
-                        </div>
-                    </div>
-                </div>
+         ABOUT SECTION  (supriyassule.in style)
+         ═══════════════════════════════════ -->
+    <style>
+    /* About — SS style */
+    .sa-about { background: #fff; padding: 60px 0 0; overflow: hidden; }
+    .sa-about-inner { display: flex; align-items: stretch; gap: 0; }
 
-                <!-- Text column -->
-                <div class="col-lg-8 col-md-7 ps-md-5 pt-4 pt-md-0">
-                    <p class="ss-section-kicker" data-hi="परिचय" data-en="About">परिचय</p>
-                    <h2 class="ss-section-heading" data-hi="दद्दू प्रसाद" data-en="Daddoo Prasad">दद्दू प्रसाद</h2>
-                    <div class="ss-rule"></div>
-                    <p class="ss-about-text mb-4" data-hi="<?= htmlspecialchars($about_hi) ?>" data-en="<?= htmlspecialchars($about_en) ?>">
+    /* Left text col */
+    .sa-text-col {
+        flex: 0 0 52%;
+        padding: 48px 56px 48px 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .sa-kicker {
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: #D21034;
+        margin-bottom: 10px;
+    }
+    .sa-name {
+        font-family: 'Mukta', 'Noto Sans Devanagari', sans-serif;
+        font-size: 2.6rem;
+        font-weight: 800;
+        color: #003893;
+        line-height: 1.1;
+        margin: 0 0 14px;
+    }
+    .sa-rule {
+        width: 44px; height: 4px;
+        background: #D21034;
+        border-radius: 2px;
+        margin-bottom: 22px;
+    }
+    .sa-desc {
+        font-size: 0.92rem;
+        color: #4a5568;
+        line-height: 1.85;
+        margin-bottom: 22px;
+        max-width: 520px;
+    }
+    /* Big decorative quote */
+    .sa-quote-wrap {
+        position: relative;
+        margin: 4px 0 30px;
+        padding: 0 0 0 10px;
+    }
+    .sa-quote-open {
+        font-size: 4rem;
+        line-height: 0.5;
+        color: #D21034;
+        font-family: Georgia, serif;
+        display: inline-block;
+        vertical-align: top;
+        margin-right: 4px;
+    }
+    .sa-quote-close {
+        font-size: 4rem;
+        line-height: 0;
+        color: #003893;
+        font-family: Georgia, serif;
+        display: inline-block;
+        vertical-align: bottom;
+        margin-left: 4px;
+    }
+    .sa-quote-text {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #003893;
+        display: inline;
+        font-style: normal;
+        line-height: 1.55;
+    }
+    /* Buttons */
+    .sa-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .sa-btn-primary {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: #003893; color: #fff !important;
+        padding: 12px 24px; border-radius: 4px;
+        font-weight: 700; font-size: 0.88rem;
+        text-decoration: none; border: none;
+        transition: background .2s, transform .2s;
+        white-space: nowrap;
+    }
+    .sa-btn-primary:hover { background: #002266; transform: translateY(-2px); }
+    .sa-btn-secondary {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: #003893; color: #fff !important;
+        padding: 12px 24px; border-radius: 4px;
+        font-weight: 700; font-size: 0.88rem;
+        text-decoration: none;
+        transition: background .2s, transform .2s;
+        white-space: nowrap;
+        opacity: 0.85;
+    }
+    .sa-btn-secondary:hover { background: #002266; opacity: 1; transform: translateY(-2px); }
+
+    /* Right photo col */
+    .sa-photo-col {
+        flex: 0 0 48%;
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        min-height: 380px;
+    }
+    .sa-photo {
+        max-height: 420px;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+        object-position: bottom center;
+        display: block;
+        filter: drop-shadow(0 4px 24px rgba(0,56,147,0.10));
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+        .sa-about-inner { flex-direction: column-reverse; }
+        .sa-text-col { padding: 32px 0 24px; flex: none; }
+        .sa-photo-col { flex: none; min-height: 260px; }
+        .sa-photo { max-height: 280px; }
+        .sa-name { font-size: 2rem; }
+    }
+    @media (max-width: 576px) {
+        .sa-name { font-size: 1.6rem; }
+        .sa-actions { flex-direction: column; }
+    }
+    </style>
+
+    <section class="sa-about">
+        <div class="container">
+            <div class="sa-about-inner">
+
+                <!-- Left: Text -->
+                <div class="sa-text-col">
+                    <p class="sa-kicker" data-hi="परिचय" data-en="About">परिचय</p>
+                    <h2 class="sa-name" data-hi="दद्दू प्रसाद" data-en="Daddoo Prasad">दद्दू प्रसाद</h2>
+                    <div class="sa-rule"></div>
+
+                    <p class="sa-desc"
+                       data-hi="<?= htmlspecialchars($about_hi) ?>"
+                       data-en="<?= htmlspecialchars($about_en) ?>">
                         <?= nl2br(htmlspecialchars($about_hi)) ?>
+                        <?php if (!empty($intro_hi)): ?>
+                        <a href="about.php" style="color:#003893;font-weight:600;text-decoration:none;" data-hi="अधिक पढ़ें.." data-en="Read More.."> अधिक पढ़ें..</a>
+                        <?php endif; ?>
                     </p>
-                    <p class="ss-about-text" data-hi="<?= htmlspecialchars($intro_hi) ?>" data-en="<?= htmlspecialchars($intro_en) ?>">
-                        <?= nl2br(htmlspecialchars($intro_hi)) ?>
-                    </p>
-                    <blockquote class="ss-blockquote">
-                        <p data-hi="&quot;मेरा लक्ष्य है कि समाज का हर व्यक्ति सम्मान और अधिकार के साथ जीवन जी सके।&quot;" data-en="&quot;My goal is that every person in society can live with dignity and rights.&quot;">
-                            "मेरा लक्ष्य है कि समाज का हर व्यक्ति सम्मान और अधिकार के साथ जीवन जी सके।"
-                        </p>
-                        <footer>— दद्दू प्रसाद</footer>
-                    </blockquote>
-                    <div class="mt-4 d-flex gap-3 flex-wrap">
-                        <a href="about.php" class="ss-btn-primary" data-hi="पूरा परिचय पढ़ें" data-en="Read More">पूरा परिचय पढ़ें</a>
-                        <a href="achievements.php" class="ss-btn-ghost" data-hi="उपलब्धियाँ" data-en="Achievements">उपलब्धियाँ</a>
+
+                    <!-- Big quote like supriyassule.in -->
+                    <div class="sa-quote-wrap">
+                        <span class="sa-quote-open">&#8220;</span><!--
+                        --><span class="sa-quote-text"
+                                 data-hi="समाज के अंतिम व्यक्ति तक न्याय पहुँचाना ही मेरा संकल्प है।"
+                                 data-en="My resolve is to ensure justice reaches the last person in society.">
+                            समाज के अंतिम व्यक्ति तक न्याय पहुँचाना ही मेरा संकल्प है।
+                        </span><!--
+                        --><span class="sa-quote-close">&#8221;</span>
+                    </div>
+
+                    <!-- CTA Buttons -->
+                    <div class="sa-actions">
+                        <a href="about.php" class="sa-btn-primary" data-hi="पूरा परिचय पढ़ें" data-en="Read Full Bio">
+                            <i class="fas fa-user-circle"></i> पूरा परिचय पढ़ें
+                        </a>
+                        <a href="achievements.php" class="sa-btn-secondary" data-hi="जनसंवाद मासिक कार्यअहवाल" data-en="Achievements">
+                            <i class="fas fa-trophy"></i> उपलब्धियाँ
+                        </a>
                     </div>
                 </div>
+
+                <!-- Right: Standing portrait photo -->
+                <div class="sa-photo-col">
+                    <img src="https://m.media-amazon.com/images/I/51dQBAlC7rL.jpg"
+                         alt="दद्दू प्रसाद"
+                         class="sa-photo"
+                         data-hi="दद्दू प्रसाद"
+                         data-en="Daddoo Prasad">
+                </div>
+
             </div>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════
-        PRESS RELEASES
-        ═══════════════════════════════════ -->
-    <section class="ss-section ss-press">
-        <div class="container">
-            <div class="ss-section-top">
-                <div>
-                    <p class="ss-section-kicker" data-hi="मीडिया" data-en="Media">मीडिया</p>
-                    <h2 class="ss-section-heading" data-hi="प्रेस विज्ञप्ति" data-en="Press Releases">प्रेस विज्ञप्ति</h2>
-                    <div class="ss-rule"></div>
-                </div>
-                <a href="press.php" class="ss-link-more" data-hi="सभी देखें →" data-en="View All →">सभी देखें →</a>
-            </div>
-            <div class="row g-0">
-                <!-- Featured -->
-                <?php $feat = $pressReleases[0]; ?>
-                <div class="col-md-5">
-                    <a href="press.php" class="ss-press-big">
-                        <div class="ss-press-big-img" style="background-image:url('<?= !empty($feat['image_url']) ? htmlspecialchars($feat['image_url']) : 'https://via.placeholder.com/600x400/003893/FECB00?text=Press' ?>')"></div>
-                        <div class="ss-press-big-body">
-                            <span class="ss-press-date"><?= date('d M Y', strtotime($feat['release_date'])) ?></span>
-                            <h3 class="ss-press-big-title" data-hi="<?= htmlspecialchars($feat['title_hi']) ?>" data-en="<?= htmlspecialchars($feat['title_en']) ?>">
-                                <?= htmlspecialchars($feat['title_hi']) ?>
-                            </h3>
-                            <?php if (!empty($feat['location_hi'])): ?>
-                            <p style="color:rgba(255,255,255,.7);font-size:.8rem;margin:6px 0 0;">
-                                <i class="fas fa-map-marker-alt me-1"></i><?= htmlspecialchars($feat['location_hi']) ?>
-                            </p>
-                            <?php endif; ?>
-                        </div>
-                    </a>
-                </div>
-                <!-- List -->
-                <div class="col-md-7">
-                    <ul class="ss-press-list">
-                        <?php for ($i=1; $i < count($pressReleases) && $i < 5; $i++): $p = $pressReleases[$i]; ?>
-                        <li class="ss-press-item">
-                            <a href="press.php" class="ss-press-item-link">
-                                <span class="ss-press-item-date"><?= date('d M Y', strtotime($p['release_date'])) ?></span>
-                                <span class="ss-press-item-title" data-hi="<?= htmlspecialchars($p['title_hi']) ?>" data-en="<?= htmlspecialchars($p['title_en']) ?>">
-                                    <?= htmlspecialchars(mb_substr($p['title_hi'], 0, 80)) ?>
-                                </span>
-                                <i class="fas fa-chevron-right ss-list-icon"></i>
-                            </a>
-                        </li>
-                        <?php endfor; ?>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- ════════════════════════════════════════
+         PRESS NOTE  — matches supriyassule.in
+         Light-blue bg · 5 horizontal photo cards
+         ════════════════════════════════════════ -->
+    <style>
+    /* ── Press Note ── */
+    .sn-press {
+        background: #dce8f9;
+        padding: 52px 0 56px;
+    }
+    .sn-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 28px;
+    }
+    .sn-heading {
+        font-family: 'Mukta','Noto Sans Devanagari',sans-serif;
+        font-size: 2rem; font-weight: 800;
+        color: #003893; margin: 0 0 10px;
+    }
+    .sn-rule { width: 44px; height: 4px; background: #D21034; border-radius: 2px; }
+    .sn-viewall {
+        display: inline-flex; align-items: center; gap: 6px;
+        border: 2px solid #003893; color: #003893;
+        padding: 6px 16px; border-radius: 20px;
+        font-weight: 700; font-size: .84rem;
+        text-decoration: none; transition: all .2s; white-space: nowrap; margin-top: 4px;
+    }
+    .sn-viewall:hover { background: #003893; color: #fff; }
 
-    <!-- ═══════════════════════════════════
-        ACHIEVEMENTS (dark section)
-        ═══════════════════════════════════ -->
-    <section class="ss-section ss-ach">
+    /* Horizontal 5-col grid */
+    .sn-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+    }
+    .sn-card {
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        display: block;
+        text-decoration: none;
+        box-shadow: 0 2px 10px rgba(0,56,147,.1);
+        transition: transform .25s, box-shadow .25s;
+    }
+    .sn-card:hover { transform: translateY(-5px); box-shadow: 0 10px 28px rgba(0,56,147,.18); }
+
+    /* Card photo */
+    .sn-card-photo {
+        position: relative;
+        width: 100%; height: 155px;
+        overflow: hidden;
+        background: #c5d6f5;
+    }
+    .sn-card-photo img {
+        width: 100%; height: 100%;
+        object-fit: cover; display: block;
+        transition: transform .4s;
+    }
+    .sn-card:hover .sn-card-photo img { transform: scale(1.07); }
+
+    /* Date badge overlaid at bottom of photo */
+    .sn-date-badge {
+        position: absolute; bottom: 0; left: 0; right: 0;
+        background: rgba(0,56,147,.80);
+        color: #fff; font-size: .72rem; font-weight: 700;
+        padding: 5px 10px; text-align: center; letter-spacing: .3px;
+    }
+    /* Card title below photo */
+    .sn-card-title {
+        padding: 12px 12px 14px;
+        font-size: .86rem; font-weight: 700;
+        color: #1a202c; line-height: 1.45; margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    @media (max-width: 1024px) { .sn-grid { grid-template-columns: repeat(3,1fr); } }
+    @media (max-width: 620px)  { .sn-grid { grid-template-columns: repeat(2,1fr); } }
+
+    /* ── Achievements & Awards ── */
+    .sn-ach {
+        position: relative;
+        padding: 52px 0 56px;
+        overflow: hidden;
+    }
+    /* Crowd background image — darkened */
+    .sn-ach::before {
+        content: '';
+        position: absolute; inset: 0;
+        background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1600&q=80');
+        background-size: cover; background-position: center;
+        filter: brightness(0.22);
+        z-index: 0;
+    }
+    .sn-ach-inner { position: relative; z-index: 1; }
+    .sn-ach-heading {
+        font-family: 'Mukta','Noto Sans Devanagari',sans-serif;
+        font-size: 2rem; font-weight: 800;
+        color: #fff; margin: 0 0 10px;
+    }
+    .sn-ach-rule { width: 44px; height: 4px; background: #D21034; border-radius: 2px; margin-bottom: 28px; }
+
+    /* 6-col grid */
+    .sn-ach-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 14px;
+    }
+    .sn-ach-card {
+        background: rgba(255,255,255,.10);
+        border: 1px solid rgba(255,255,255,.18);
+        border-radius: 8px; overflow: hidden;
+        text-decoration: none; display: block;
+        backdrop-filter: blur(3px);
+        transition: background .25s, transform .25s;
+    }
+    .sn-ach-card:hover { background: rgba(255,255,255,.22); transform: translateY(-5px); }
+
+    .sn-ach-thumb {
+        width: 100%; height: 120px; overflow: hidden;
+        background: rgba(255,255,255,.06);
+        display: flex; align-items: center; justify-content: center;
+    }
+    .sn-ach-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+    .sn-ach-card:hover .sn-ach-thumb img { transform: scale(1.07); }
+
+    .sn-ach-label {
+        padding: 9px 10px;
+        font-size: .78rem; font-weight: 700;
+        color: rgba(255,255,255,.92);
+        line-height: 1.4; text-align: center;
+    }
+
+    @media (max-width: 1024px) { .sn-ach-grid { grid-template-columns: repeat(3,1fr); } }
+    @media (max-width: 620px)  { .sn-ach-grid { grid-template-columns: repeat(2,1fr); } }
+    </style>
+
+    <!-- PRESS NOTE -->
+    <section class="sn-press">
         <div class="container">
-            <div class="ss-section-top">
+            <div class="sn-head">
                 <div>
-                    <p class="ss-section-kicker kicker-light" data-hi="मील के पत्थर" data-en="Milestones">मील के पत्थर</p>
-                    <h2 class="ss-section-heading text-white" data-hi="उपलब्धियाँ एवं पुरस्कार" data-en="Achievements & Awards">उपलब्धियाँ एवं पुरस्कार</h2>
-                    <div class="ss-rule" style="background:var(--ss-yellow,#FECB00)"></div>
+                    <h2 class="sn-heading" data-hi="प्रेस नोट" data-en="Press Note">प्रेस नोट</h2>
+                    <div class="sn-rule"></div>
                 </div>
-                <a href="achievements.php" class="ss-link-more" style="color:rgba(255,255,255,0.65);" data-hi="सभी देखें →" data-en="View All →">सभी देखें →</a>
+                <a href="press.php" class="sn-viewall" data-hi="सभी देखें" data-en="View all">
+                    View all <i class="fas fa-plus-circle"></i>
+                </a>
             </div>
-            <div class="row g-4">
+
+            <div class="sn-grid">
                 <?php
-                $achIcons = ['fas fa-balance-scale','fas fa-graduation-cap','fas fa-home','fas fa-shield-alt','fas fa-book-open','fas fa-users'];
-                foreach ($achievements as $i => $ach): if ($i >= 6) break; ?>
-                <div class="col-md-4 col-6">
-                    <div class="ss-ach-card">
-                        <i class="<?= $achIcons[$i % 6] ?> ss-ach-icon"></i>
-                        <p class="ss-ach-text" data-hi="<?= htmlspecialchars($ach['category_hi']) ?>" data-en="<?= htmlspecialchars($ach['category_en']) ?>">
-                            <?= htmlspecialchars($ach['category_hi']) ?>
-                        </p>
+                /* Fallback stock images if no image_url in DB */
+                $pressImgs = [
+                    'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=400&q=80',
+                    'https://images.unsplash.com/photo-1569025743873-ea3a9ade89f9?w=400&q=80',
+                    'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?w=400&q=80',
+                    'https://images.unsplash.com/photo-1543269664-56d93c1b41a6?w=400&q=80',
+                    'https://images.unsplash.com/photo-1523995462485-3d171b5c8fa9?w=400&q=80',
+                ];
+                foreach ($pressReleases as $idx => $p):
+                    if ($idx >= 5) break;
+                    $img = !empty($p['image_url']) ? $p['image_url'] : $pressImgs[$idx % 5];
+                ?>
+                <a href="press.php" class="sn-card">
+                    <div class="sn-card-photo">
+                        <img src="<?= htmlspecialchars($img) ?>"
+                             alt="<?= htmlspecialchars(mb_substr($p['title_hi'],0,40)) ?>"
+                             loading="lazy"
+                             onerror="this.src='https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=400&q=80'">
+                        <div class="sn-date-badge"><?= date('d F Y', strtotime($p['release_date'])) ?></div>
                     </div>
-                </div>
+                    <p class="sn-card-title"
+                       data-hi="<?= htmlspecialchars($p['title_hi']) ?>"
+                       data-en="<?= htmlspecialchars($p['title_en']) ?>">
+                        <?= htmlspecialchars($p['title_hi']) ?>
+                    </p>
+                </a>
                 <?php endforeach; ?>
             </div>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════
-        POLITICAL JOURNEY (Timeline)
-        ═══════════════════════════════════ -->
-    <section class="ss-section ss-journey">
-        <div class="container">
-            <div class="row align-items-start g-5">
-                <!-- Sticky left intro -->
-                <div class="col-lg-4">
-                    <div class="ss-journey-intro sticky-top" style="top:90px">
-                        <p class="ss-section-kicker" data-hi="राजनीतिक सफर" data-en="Political Journey">राजनीतिक सफर</p>
-                        <h2 class="ss-section-heading" data-hi="नेतृत्व. अनुभव. मूल्य." data-en="Leadership. Experience. Values.">नेतृत्व.<br>अनुभव.<br>मूल्य.</h2>
-                        <div class="ss-rule"></div>
-                        <p class="ss-journey-desc">पिछले 30 वर्षों में दद्दू प्रसाद जी ने समाजवादी पार्टी के वरिष्ठ नेता और सामाजिक परिवर्तन मिशन के राष्ट्रीय संयोजक के रूप में खुद को स्थापित किया है।</p>
-                        <a href="about.php" class="ss-btn-primary mt-3">पूरी जीवनी पढ़ें →</a>
-                    </div>
+    <!-- ACHIEVEMENTS & AWARDS -->
+    <section class="sn-ach">
+        <div class="container sn-ach-inner">
+            <div class="sn-head">
+                <div>
+                    <h2 class="sn-ach-heading" data-hi="उपलब्धियाँ एवं पुरस्कार" data-en="Achievements &amp; Awards">
+                        उपलब्धियाँ एवं पुरस्कार
+                    </h2>
+                    <div class="sn-ach-rule"></div>
                 </div>
-                <!-- Timeline -->
-                <div class="col-lg-8">
-                    <div class="ss-timeline">
-                        <?php foreach ($journey as $idx => $item): ?>
-                        <div class="ss-tl-item">
-                            <div class="ss-tl-dot"></div>
-                            <div class="ss-tl-card">
-                                <div class="ss-tl-year">0<?= $idx+1 ?></div>
-                                <h4 class="ss-tl-title" data-hi="<?= htmlspecialchars($item['title_hi']) ?>" data-en="<?= htmlspecialchars($item['title_en']) ?>">
-                                    <?= htmlspecialchars($item['title_hi']) ?>
-                                </h4>
-                                <p class="ss-tl-desc" data-hi="<?= htmlspecialchars($item['content_hi']) ?>" data-en="<?= htmlspecialchars($item['content_en']) ?>">
-                                    <?= htmlspecialchars($item['content_hi']) ?>
-                                </p>
-                            </div>
-                        </div>
-                        <?php endforeach; ?>
+                <a href="achievements.php" class="sn-viewall" style="border-color:rgba(255,255,255,.55);color:#fff;" data-hi="सभी देखें" data-en="View all">
+                    View all <i class="fas fa-plus-circle"></i>
+                </a>
+            </div>
+
+            <div class="sn-ach-grid">
+                <?php
+                $achImgs = [
+                    'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=300&q=80',
+                    'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=300&q=80',
+                    'https://images.unsplash.com/photo-1599298585685-e7e37fed22a5?w=300&q=80',
+                    'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=300&q=80',
+                    'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=300&q=80',
+                    'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?w=300&q=80',
+                ];
+                foreach ($achievements as $idx => $ach):
+                    if ($idx >= 6) break;
+                ?>
+                <a href="achievements.php" class="sn-ach-card">
+                    <div class="sn-ach-thumb">
+                        <img src="<?= $achImgs[$idx % 6] ?>"
+                             alt="<?= htmlspecialchars($ach['category_hi']) ?>"
+                             loading="lazy">
                     </div>
-                </div>
+                    <div class="sn-ach-label"
+                         data-hi="<?= htmlspecialchars($ach['category_hi']) ?>"
+                         data-en="<?= htmlspecialchars($ach['category_en']) ?>">
+                        <?= htmlspecialchars(mb_substr($ach['category_hi'], 0, 40)) ?>
+                    </div>
+                </a>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════
-        NEWS + SOCIAL MEDIA
-        ═══════════════════════════════════ -->
-    <section class="ss-section ss-news-social">
+
+
+
+
+    <!-- ════════════════════════════════════════════════
+         POLITICAL JOURNEY — Premium Vertical Zigzag
+         ════════════════════════════════════════════════ -->
+    <style>
+    /* ── Section wrapper ── */
+    .pj2-section {
+        padding: 72px 0 80px;
+        background: linear-gradient(160deg, #f8faff 0%, #edf2ff 50%, #fff 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    /* Decorative large circle blob */
+    .pj2-section::before {
+        content: '';
+        position: absolute;
+        right: -120px; top: -120px;
+        width: 420px; height: 420px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(0,56,147,.07) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    /* Header */
+    .pj2-kicker {
+        font-size: .68rem; font-weight: 800;
+        letter-spacing: 3px; text-transform: uppercase;
+        color: #D21034; margin-bottom: 8px;
+    }
+    .pj2-title {
+        font-family: 'Mukta','Noto Sans Devanagari',sans-serif;
+        font-size: 2.2rem; font-weight: 800;
+        color: #003893; margin: 0 0 10px;
+    }
+    .pj2-subtitle {
+        font-size: .95rem; color: #64748b;
+        max-width: 560px; line-height: 1.75; margin-bottom: 56px;
+    }
+
+    /* ── Centre vertical line ── */
+    .pj2-timeline {
+        position: relative;
+        padding-bottom: 20px;
+    }
+    .pj2-timeline::before {
+        content: '';
+        position: absolute;
+        left: 50%; top: 0; bottom: 0;
+        width: 3px;
+        background: linear-gradient(to bottom, #D21034, #003893);
+        border-radius: 4px;
+        transform: translateX(-50%);
+    }
+
+    /* ── Each milestone row ── */
+    .pj2-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 48px;
+        gap: 0;
+        position: relative;
+    }
+    /* Even rows: card LEFT, image RIGHT */
+    .pj2-row:nth-child(even) { flex-direction: row-reverse; }
+
+    /* Card half */
+    .pj2-card {
+        flex: 0 0 42%;
+        background: #fff;
+        border-radius: 12px;
+        padding: 28px 30px 24px;
+        box-shadow: 0 4px 20px rgba(0,56,147,.10);
+        transition: transform .3s, box-shadow .3s;
+        position: relative;
+        z-index: 1;
+        margin: 0 40px;
+    }
+    .pj2-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 36px rgba(0,56,147,.18);
+    }
+    /* Left-pointing arrow on even rows, right on odd */
+    .pj2-row:nth-child(odd)  .pj2-card::after {
+        content: '';
+        position: absolute;
+        right: -12px; top: 28px;
+        width: 0; height: 0;
+        border: 12px solid transparent;
+        border-left-color: #fff;
+    }
+    .pj2-row:nth-child(even) .pj2-card::after {
+        content: '';
+        position: absolute;
+        left: -12px; top: 28px;
+        width: 0; height: 0;
+        border: 12px solid transparent;
+        border-right-color: #fff;
+    }
+
+    .pj2-year-badge {
+        display: inline-block;
+        background: #003893;
+        color: #FECB00;
+        font-size: .74rem; font-weight: 800;
+        padding: 4px 12px; border-radius: 20px;
+        margin-bottom: 12px; letter-spacing: .4px;
+    }
+    .pj2-card-title {
+        font-family: 'Mukta','Noto Sans Devanagari',sans-serif;
+        font-size: 1.15rem; font-weight: 800;
+        color: #003893; margin: 0 0 10px; line-height: 1.3;
+    }
+    .pj2-card-desc {
+        font-size: .87rem; color: #4a5568;
+        line-height: 1.75; margin-bottom: 18px;
+    }
+    .pj2-card-btn {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: #003893; color: #fff;
+        padding: 8px 20px; border-radius: 4px;
+        font-size: .82rem; font-weight: 700;
+        text-decoration: none;
+        border-left: 3px solid #FECB00;
+        transition: background .2s, transform .15s;
+    }
+    .pj2-card-btn:hover { background: #D21034; color: #fff; transform: translateX(3px); }
+
+    /* Centre dot (numbered circle) */
+    .pj2-dot {
+        flex: 0 0 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #003893 0%, #1565c0 100%);
+        border: 4px solid #fff;
+        box-shadow: 0 4px 16px rgba(0,56,147,.35);
+        display: flex; align-items: center; justify-content: center;
+        z-index: 2;
+        flex-shrink: 0;
+        font-size: 1.3rem; font-weight: 800;
+        color: #FECB00;
+        font-family: 'Mukta', sans-serif;
+    }
+
+    /* Image half */
+    .pj2-img-wrap {
+        flex: 0 0 calc(42% - 40px);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,.13);
+        margin: 0 40px;
+        position: relative;
+    }
+    .pj2-img-wrap img {
+        width: 100%; height: 220px;
+        object-fit: cover; display: block;
+        transition: transform .45s;
+    }
+    .pj2-row:hover .pj2-img-wrap img { transform: scale(1.06); }
+    /* Year label overlay on image */
+    .pj2-img-year {
+        position: absolute;
+        top: 14px; right: 14px;
+        background: rgba(0,56,147,.85);
+        color: #FECB00;
+        font-size: .72rem; font-weight: 800;
+        padding: 4px 10px; border-radius: 20px;
+        letter-spacing: .4px;
+    }
+
+    /* Mobile: stack vertically */
+    @media (max-width: 900px) {
+        .pj2-timeline::before { left: 28px; }
+        .pj2-row, .pj2-row:nth-child(even) {
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 64px;
+        }
+        .pj2-dot {
+            position: absolute; left: 0; top: 0;
+            width: 52px; height: 52px; font-size: 1rem;
+        }
+        .pj2-card, .pj2-img-wrap {
+            flex: none; width: 100%; margin: 8px 0;
+        }
+        .pj2-row:nth-child(odd)  .pj2-card::after,
+        .pj2-row:nth-child(even) .pj2-card::after { display: none; }
+    }
+    </style>
+
+    <?php
+    $pj2Data = [
+        [
+            'year'  => 'प्रारंभिक जीवन',
+            'year_en' => 'Early Life',
+            'img'   => 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=600&q=80',
+        ],
+        [
+            'year'  => 'शिक्षा — 1980s',
+            'year_en' => 'Education — 1980s',
+            'img'   => 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&q=80',
+        ],
+        [
+            'year'  => 'राजनीतिक यात्रा — 1990s',
+            'year_en' => 'Political Journey — 1990s',
+            'img'   => 'https://images.unsplash.com/photo-1588681664899-f142ff2dc9b1?w=600&q=80',
+        ],
+        [
+            'year'  => 'कैबिनेट मंत्री — 2007–2010',
+            'year_en' => 'Cabinet Minister — 2007–2010',
+            'img'   => 'https://images.unsplash.com/photo-1543269664-56d93c1b41a6?w=600&q=80',
+        ],
+        [
+            'year'  => 'सामाजिक मिशन — 2010 से अब',
+            'year_en' => 'Social Mission — 2010 to Present',
+            'img'   => 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?w=600&q=80',
+        ],
+    ];
+    foreach ($journey as $i => $item) {
+        if (isset($pj2Data[$i])) {
+            $pj2Data[$i]['title_hi']   = $item['title_hi']   ?? $pj2Data[$i]['year'];
+            $pj2Data[$i]['title_en']   = $item['title_en']   ?? $pj2Data[$i]['year_en'];
+            $pj2Data[$i]['content_hi'] = $item['content_hi'] ?? '';
+            $pj2Data[$i]['content_en'] = $item['content_en'] ?? '';
+        }
+    }
+    ?>
+
+    <section class="pj2-section">
         <div class="container">
-            <div class="row g-5">
-                <!-- Latest News -->
-                <div class="col-lg-7">
-                    <p class="ss-section-kicker" data-hi="ताज़ा खबरें" data-en="Latest News">ताज़ा खबरें</p>
-                    <h2 class="ss-section-heading" data-hi="नवीनतम समाचार" data-en="Latest News">नवीनतम समाचार</h2>
-                    <div class="ss-rule"></div>
-                    <ul class="ss-news-list">
-                        <?php foreach ($pressReleases as $i => $p): if ($i >= 5) break; ?>
-                        <li class="ss-news-item">
-                            <a href="press.php" class="ss-news-link">
-                                <div class="ss-news-date">
-                                    <span class="ss-news-day"><?= date('d', strtotime($p['release_date'])) ?></span>
-                                    <span class="ss-news-mon"><?= date('M Y', strtotime($p['release_date'])) ?></span>
-                                </div>
-                                <div class="ss-news-body">
-                                    <p class="ss-news-title"
-                                    data-hi="<?= htmlspecialchars($p['title_hi']) ?>"
-                                    data-en="<?= htmlspecialchars($p['title_en']) ?>">
-                                        <?= htmlspecialchars(mb_substr($p['title_hi'], 0, 100)) ?>
-                                    </p>
-                                    <span class="ss-news-cta" data-hi="आगे पढ़ें →" data-en="Read More →">आगे पढ़ें →</span>
-                                </div>
-                            </a>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
+            <!-- Header -->
+            <p class="pj2-kicker" data-hi="राजनीतिक सफर" data-en="Political Journey">राजनीतिक सफर</p>
+            <h2 class="pj2-title" data-hi="नेतृत्व. अनुभव. मूल्य." data-en="Leadership. Experience. Values.">
+                नेतृत्व. अनुभव. मूल्य.
+            </h2>
+            <p class="pj2-subtitle">
+                श्री दद्दू प्रसाद जी ने 30 वर्षों से अधिक के राजनीतिक जीवन में समाज के अंतिम व्यक्ति तक न्याय पहुँचाने का संकल्प लिया है।
+            </p>
+
+            <!-- Timeline rows -->
+            <div class="pj2-timeline">
+                <?php foreach ($pj2Data as $i => $d):
+                    $title = $d['title_hi'] ?? $d['year'];
+                    $desc  = $d['content_hi'] ?? '';
+                ?>
+                <div class="pj2-row">
+                    <!-- Info card -->
+                    <div class="pj2-card">
+                        <span class="pj2-year-badge"
+                              data-hi="<?= htmlspecialchars($d['year']) ?>"
+                              data-en="<?= htmlspecialchars($d['year_en'] ?? $d['year']) ?>">
+                            <?= htmlspecialchars($d['year']) ?>
+                        </span>
+                        <h3 class="pj2-card-title"
+                            data-hi="<?= htmlspecialchars($title) ?>"
+                            data-en="<?= htmlspecialchars($d['title_en'] ?? $title) ?>">
+                            <?= htmlspecialchars($title) ?>
+                        </h3>
+                        <?php if ($desc): ?>
+                        <p class="pj2-card-desc"
+                           data-hi="<?= htmlspecialchars($desc) ?>"
+                           data-en="<?= htmlspecialchars($d['content_en'] ?? '') ?>">
+                            <?= htmlspecialchars(mb_substr($desc, 0, 160)) ?>
+                        </p>
+                        <?php endif; ?>
+                        <a href="about.php" class="pj2-card-btn">
+                            <i class="fas fa-arrow-right"></i> विस्तृत पढ़ें
+                        </a>
+                    </div>
+
+                    <!-- Numbered circle dot -->
+                    <div class="pj2-dot"><?= $i + 1 ?></div>
+
+                    <!-- Photo -->
+                    <div class="pj2-img-wrap">
+                        <img src="<?= htmlspecialchars($d['img']) ?>"
+                             alt="<?= htmlspecialchars($title) ?>"
+                             loading="lazy">
+                        <span class="pj2-img-year"><?= htmlspecialchars($d['year']) ?></span>
+                    </div>
                 </div>
+                <?php endforeach; ?>
+            </div>
 
-                <!-- Social Connect -->
-                <div class="col-lg-5">
-                    <p class="ss-section-kicker" data-hi="सोशल मीडिया" data-en="Social Media">सोशल मीडिया</p>
-                    <h2 class="ss-section-heading" data-hi="जुड़े रहें" data-en="Stay Connected">जुड़े रहें</h2>
-                    <div class="ss-rule"></div>
-
-                    <?php
-                    $fbLink  = getSettingVal($pdo, 'fb_link')['value_en']  ?: 'https://www.facebook.com/dadduprasadoffice/';
-                    $twLink  = getSettingVal($pdo, 'twitter_link')['value_en']?: 'https://twitter.com/dadduprasad';
-                    $igLink  = getSettingVal($pdo, 'ig_link')['value_en']   ?: 'https://instagram.com/daddu.prasad';
-                    $ytLink  = getSettingVal($pdo, 'yt_link')['value_en']   ?: 'https://www.youtube.com/@DadduPrasad';
-                    ?>
-                    <div class="ss-socials">
-                        <a href="<?= htmlspecialchars($fbLink) ?>" target="_blank" class="ss-social-btn fb"><i class="fab fa-facebook-f"></i> Facebook पर फॉलो करें</a>
-                        <a href="<?= htmlspecialchars($twLink) ?>" target="_blank" class="ss-social-btn tw"><i class="fab fa-twitter"></i> Twitter पर फॉलो करें</a>
-                        <a href="<?= htmlspecialchars($igLink) ?>" target="_blank" class="ss-social-btn ig"><i class="fab fa-instagram"></i> Instagram पर फॉलो करें</a>
-                        <a href="<?= htmlspecialchars($ytLink) ?>" target="_blank" class="ss-social-btn yt"><i class="fab fa-youtube"></i> YouTube सब्सक्राइब करें</a>
-                    </div>
-
-                    <?php if (!empty($media)): ?>
-                    <div class="mt-4">
-                        <?php foreach ($media as $vid): ?>
-                        <div class="ss-yt-wrap mb-3">
-                            <iframe src="<?= htmlspecialchars(getYoutubeEmbedUrl($vid['media_url'])) ?>" frameborder="0" allowfullscreen width="100%" height="200" loading="lazy"></iframe>
-                            <?php if (!empty($vid['caption_hi'])): ?>
-                            <p class="ss-yt-caption mt-1"><?= htmlspecialchars($vid['caption_hi']) ?></p>
-                            <?php endif; ?>
-                        </div>
-                        <?php endforeach; ?>
-                    </div>
-                    <?php else: ?>
-                    <div class="ss-yt-placeholder mt-4">
-                        <i class="fab fa-youtube fa-3x text-danger mb-3 d-block"></i>
-                        <p data-hi="यूट्यूब चैनल देखें" data-en="Watch on YouTube">यूट्यूब चैनल देखें</p>
-                        <a href="<?= htmlspecialchars($ytLink) ?>" target="_blank" class="ss-btn-primary mt-2">Subscribe Now</a>
-                    </div>
-                    <?php endif; ?>
-                </div>
+            <!-- View full bio button -->
+            <div style="text-align:center;margin-top:16px;">
+                <a href="about.php" class="pj2-card-btn" style="font-size:.9rem;padding:12px 32px;">
+                    <i class="fas fa-user-circle"></i> पूरी जीवनी पढ़ें
+                </a>
             </div>
         </div>
     </section>
+
+
+
 
     <!-- ═══════════════════════════════════
         CONTACT STRIP

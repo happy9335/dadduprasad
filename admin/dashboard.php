@@ -1,25 +1,31 @@
 <?php
 require_once 'includes/header.php';
 
-// Get some basic stats
+// Get all table stats
 try {
     $stats = [];
-    
-    $stmt = $pdo->query("SELECT COUNT(*) FROM contact_messages");
-    $stats['messages'] = $stmt->fetchColumn();
+    foreach ([
+        'messages'     => 'contact_messages',
+        'press'        => 'press_releases',
+        'gallery'      => 'media_gallery',
+        'achievements' => 'achievements',
+        'slider'       => 'home_slider',
+        'biography'    => 'biography',
+    ] as $key => $table) {
+        $stats[$key] = $pdo->query("SELECT COUNT(*) FROM `$table`")->fetchColumn();
+    }
+    $stats['images'] = $pdo->query("SELECT COUNT(*) FROM media_gallery WHERE media_type='image'")->fetchColumn();
+    $stats['videos'] = $pdo->query("SELECT COUNT(*) FROM media_gallery WHERE media_type='video'")->fetchColumn();
+    $stats['unread'] = $pdo->query("SELECT COUNT(*) FROM contact_messages")->fetchColumn();
 
-    $stmt = $pdo->query("SELECT COUNT(*) FROM press_releases");
-    $stats['press'] = $stmt->fetchColumn();
-
-    $stmt = $pdo->query("SELECT COUNT(*) FROM media_gallery");
-    $stats['gallery'] = $stmt->fetchColumn();
-    
-    $stmt = $pdo->query("SELECT COUNT(*) FROM achievements");
-    $stats['achievements'] = $stmt->fetchColumn();
-
+    // Recent messages
+    $recentMsgs = $pdo->query("SELECT * FROM contact_messages ORDER BY submitted_at DESC LIMIT 5")->fetchAll();
+    // Recent press
+    $recentPress = $pdo->query("SELECT * FROM press_releases ORDER BY release_date DESC LIMIT 5")->fetchAll();
 } catch (PDOException $e) {
     echo "<div class='alert alert-danger'>Database Error: " . $e->getMessage() . "</div>";
-    $stats = ['messages'=>0, 'press'=>0, 'gallery'=>0, 'achievements'=>0];
+    $stats = array_fill_keys(['messages','press','gallery','achievements','slider','biography','images','videos','unread'], 0);
+    $recentMsgs = $recentPress = [];
 }
 ?>
 
